@@ -20,7 +20,7 @@ void setup() {
     Serial.println("World");
   });
 
-  Serial.print(" : ");
+  Serial.print(" : <wait 5secs> : ");
 }
 
 void loop() {
