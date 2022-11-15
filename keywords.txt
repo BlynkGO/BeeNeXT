@@ -1,0 +1,58 @@
+#######################################
+# Syntax Coloring Map LowPower
+#######################################
+
+
+#######################################
+# Library (KEYWORD3)
+#######################################
+
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+BeeNeXT	KEYWORD1
+
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+BEENEXT_DATA	KEYWORD2
+
+# BeeNeXT API
+begin	KEYWORD2
+update	KEYWORD2
+toString	KEYWORD2
+toInt	KEYWORD2
+toFloat	KEYWORD2
+toDouble	KEYWORD2
+toBool	KEYWORD2
+c_str	KEYWORD2
+
+# BeeNeXT SoftTimer API
+setInterval	KEYWORD2
+setOnce	KEYWORD2
+delay	KEYWORD2
+del	KEYWORD2
+
+
+#######################################
+# Instances (KEYWORD2)
+#######################################
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+CMD_LIGHT_OFF	LITERAL1
+CMD_LIGHT_ON	LITERAL1
+CMD_SD_DIR	LITERAL1
+CMD_WIFI_SETTING	LITERAL1
+CMD_WIFI_CONNECT	LITERAL1
+CMD_WIFI_DISCONNECT	LITERAL1
+CMD_CAPTURE_2_SPIFFS	LITERAL1
+CMD_CAPTURE_2_SD	LITERAL1
+CMD_LINE_NOTIFY	LITERAL1
+
