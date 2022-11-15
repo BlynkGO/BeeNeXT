@@ -36,7 +36,9 @@ setInterval	KEYWORD2
 setOnce	KEYWORD2
 delay	KEYWORD2
 del	KEYWORD2
-
+pause	KEYWORD2
+replay	KEYWORD2
+run	KEYWORD2
 
 #######################################
 # Instances (KEYWORD2)

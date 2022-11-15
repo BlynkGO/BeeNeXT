@@ -27,6 +27,20 @@ void SoftTimer::setInterval(unsigned long period_ms, swtimer_param_cb_t fn, void
   }
 }
 
+void SoftTimer::pause(){
+  swtimer_t* _cur_node = SoftTimer::find_swtimer(this->_swtimer_id);
+  if( _cur_node->type == SWTIMER_TYPE_INTERVAL ){
+    _cur_node->pause = true;
+  }
+}
+
+void SoftTimer::replay(){
+  swtimer_t* _cur_node = SoftTimer::find_swtimer(this->_swtimer_id);
+  if( _cur_node->type == SWTIMER_TYPE_INTERVAL ){
+    _cur_node->pause = false;
+  }
+}
+
 void SoftTimer::delay(unsigned long delay_ms, swtimer_cb_t fn, bool start_first){
   this->del();
   this->_swtimer_id = SoftTimer::add_swtimer(SWTIMER_TYPE_DELAY, delay_ms, fn);
@@ -69,6 +83,7 @@ uint16_t SoftTimer::add_swtimer(swtimer_type_t type, unsigned long timeout, swti
     }
     new_node->id      = id;
     new_node->type    = type;
+    new_node->pause   = false;
     new_node->timeout = timeout;
     new_node->timer   = millis() + new_node->timeout ;
     new_node->fn_cb   = fn_cb;
@@ -96,6 +111,7 @@ uint16_t SoftTimer::add_swtimer(swtimer_type_t type, unsigned long timeout, swti
     }
     new_node->id      = id;
     new_node->type    = type;
+    new_node->pause   = false;
     new_node->timeout = timeout;
     new_node->timer   = millis() + new_node->timeout ;
     new_node->fn_cb   = NULL;
@@ -157,9 +173,13 @@ void SoftTimer::run(){
 
     if ( millis() >= node->timer ) {
       node->timer = millis() + node->timeout;
-      
-      if( node->fn_cb)            node->fn_cb();
-      else if( node->fn_param_cb) node->fn_param_cb(node->param);
+
+      if( (node->type == SWTIMER_TYPE_DELAY ) || 
+          (node->type == SWTIMER_TYPE_INTERVAL && !node->pause ) )
+      {
+        if( node->fn_cb)            node->fn_cb();
+        else if( node->fn_param_cb) node->fn_param_cb(node->param);
+      }
       
       if (node->type == SWTIMER_TYPE_DELAY) {
         del_swtimer(node->id);
