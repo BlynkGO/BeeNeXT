@@ -20,6 +20,7 @@ BeeNeXT	KEYWORD1
 #######################################
 
 BEENEXT_DATA	KEYWORD2
+SERIAL_DATA	KEYWORD2
 
 # BeeNeXT API
 begin	KEYWORD2
@@ -47,7 +48,7 @@ run	KEYWORD2
 #######################################
 # Constants (LITERAL1)
 #######################################
-
+SoftTimer	LITERAL1
 CMD_LIGHT_OFF	LITERAL1
 CMD_LIGHT_ON	LITERAL1
 CMD_SD_DIR	LITERAL1
