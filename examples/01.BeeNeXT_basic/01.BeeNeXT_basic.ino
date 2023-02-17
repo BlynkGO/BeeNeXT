@@ -11,8 +11,8 @@ void setup() {
   pinMode(13,OUTPUT);
   timer.setInterval(1000,[](){
     static uint32_t c;
-//    BeeNeXT.println(c++);
-    Serial.println(c++);
+    BeeNeXT.println(c++);
+    // Serial.println(c++);
   });
 }
 
