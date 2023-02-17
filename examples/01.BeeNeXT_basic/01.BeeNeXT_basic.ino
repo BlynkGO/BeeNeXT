@@ -18,10 +18,6 @@ void setup() {
 
 void loop() {
   BeeNeXT.update();
-  if(Serial.available()){
-    String data = Serial.readStringUntil('\n'); data.trim();
-    BeeNeXT.command((uint8_t)data.toInt());
-  }
 }
 
 BEENEXT_DATA(){
@@ -29,3 +25,6 @@ BEENEXT_DATA(){
   digitalWrite(13, BeeNeXT.toBool() );
 }
 
+// SERIAL_DATA(){
+//   Serial.println(String("[Serial] ")+ BeeNeXT.toString());
+// }
