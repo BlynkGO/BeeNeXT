@@ -83,6 +83,7 @@ void BeeNeXT_class::update(){
         _data = data;
         BeeNeXT_onData();
       }else{
+        _data = data;
         BeeNeXT_onSerialData();
       }
     }
@@ -96,6 +97,7 @@ void BeeNeXT_class::update(){
         _data = data;
         BeeNeXT_onData();
       }else{
+        _data = data;
         BeeNeXT_onSerialData();
       }
     }

@@ -1,7 +1,7 @@
 #ifndef __BEENEXT_H__
 #define __BEENEXT_H__
 
-#define BEENEXT_VERSION     1.0.1
+#define BEENEXT_VERSION     1.0.2
 
 //#include "../../config/blynkgo_config.h"
 #define BEENEXT
