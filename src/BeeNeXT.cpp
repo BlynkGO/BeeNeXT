@@ -1,6 +1,6 @@
 #include "BeeNeXT.h"
 
-#if defined(BEENEXT) || BLYNKGO_USE_BEENEXT
+#if defined(BEENEXT) || BLYNKGO_USE_BEENEXT 
 
 void BeeNeXT_NoOpCbk() {}
 BEENEXT_DATA()    __attribute__((weak, alias("BeeNeXT_NoOpCbk")));
