@@ -78,7 +78,10 @@ class BeeNeXT_class : public Print {
 
     void command(uint16_t cmd);
 
-    inline void send(String key, String value)    { this->println(key+":"+value); }
+    inline void send(String key, String value)                      { this->println(key+":"+value);                     }
+    inline void send(String key, int value)                         { this->send(key,String(value));                    }
+    inline void send(String key, float  value, uint8_t decimal=2)   { this->send(key,String(value,(uint32_t)decimal));  }
+    inline void send(String key, double value, uint8_t decimal)     { this->send(key,String(value,(uint32_t)decimal));  }
 
     //virtual
     size_t write(uint8_t);

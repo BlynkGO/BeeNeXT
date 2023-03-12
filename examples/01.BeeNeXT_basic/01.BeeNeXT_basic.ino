@@ -11,7 +11,8 @@ void setup() {
   pinMode(13,OUTPUT);
   timer.setInterval(1000,[](){
     static uint32_t c;
-    BeeNeXT.println(c++);
+    BeeNeXT.send("MY_NUM", c++);    // ส่งแบบ key & value
+    // BeeNeXT.println(c++);        // ส่งแบบพื้นฐาน
     // Serial.println(c++);
   });
 }
@@ -21,10 +22,13 @@ void loop() {
 }
 
 BEENEXT_DATA(){
-  Serial.println(String("[BeeNeXT] ")+ BeeNeXT.toString());
-  digitalWrite(13, BeeNeXT.toBool() );
+  Serial.println(String("[BeeNeXT] ")+ BeeNeXT.data());
+
+  if(BeeNeXT.key() == "LED") {   // เมื่อ key ตรงกับ "LED"
+    digitalWrite(13, BeeNeXT.toBool() );   // ให้ value เปลี่ยนเป็นข้อมูลแบบ boolean  
+  }
 }
 
 // SERIAL_DATA(){
-//   Serial.println(String("[Serial] ")+ BeeNeXT.toString());
+//   Serial.println(String("[Serial] ")+ BeeNeXT.data());
 // }
