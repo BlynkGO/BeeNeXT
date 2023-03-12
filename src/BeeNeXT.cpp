@@ -4,7 +4,7 @@
 
 void BeeNeXT_NoOpCbk() {}
 BEENEXT_DATA()    __attribute__((weak, alias("BeeNeXT_NoOpCbk")));
-SERIAL_DATA()    	__attribute__((weak, alias("BeeNeXT_NoOpCbk")));
+SERIAL_DATA()     __attribute__((weak, alias("BeeNeXT_NoOpCbk")));
 
 BeeNeXT_class BeeNeXT;
 
@@ -74,6 +74,17 @@ void BeeNeXT_class::end(){
 #endif
 }
 
+void  BeeNeXT_class::extract_key_value(){
+  int index = _data.indexOf(":");
+  if( index > 0) {
+    _key   = _data.substring(0, index);
+    _value = _data.substring(index+1);
+  }else{
+    _key   = "";
+    _value = "";
+  }
+}
+
 void BeeNeXT_class::update(){
   if(_hw_serial != NULL) {
     if(_hw_serial->available()){
@@ -81,9 +92,11 @@ void BeeNeXT_class::update(){
       if(data.startsWith("[BN]")){
         data.replace("[BN]", "");
         _data = data;
+        this->extract_key_value();
         BeeNeXT_onData();
       }else{
         _data = data;
+        this->extract_key_value();
         BeeNeXT_onSerialData();
       }
     }
@@ -95,9 +108,11 @@ void BeeNeXT_class::update(){
       if(data.startsWith("[BN]")){
         data.replace("[BN]", "");
         _data = data;
+        this->extract_key_value();
         BeeNeXT_onData();
       }else{
         _data = data;
+        this->extract_key_value();
         BeeNeXT_onSerialData();
       }
     }

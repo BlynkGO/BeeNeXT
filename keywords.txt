@@ -31,6 +31,9 @@ toFloat	KEYWORD2
 toDouble	KEYWORD2
 toBool	KEYWORD2
 c_str	KEYWORD2
+key	KEYWORD2
+value	KEYWORD2
+send	KEYWORD2
 
 # BeeNeXT SoftTimer API
 setInterval	KEYWORD2
@@ -40,6 +43,7 @@ del	KEYWORD2
 pause	KEYWORD2
 replay	KEYWORD2
 run	KEYWORD2
+
 
 #######################################
 # Instances (KEYWORD2)

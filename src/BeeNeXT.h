@@ -1,7 +1,7 @@
 #ifndef __BEENEXT_H__
 #define __BEENEXT_H__
 
-#define BEENEXT_VERSION     1.0.2
+#define BEENEXT_VERSION     1.0.3
 
 // #include "../../config/blynkgo_config.h"
 #define BEENEXT
@@ -72,11 +72,18 @@ class BeeNeXT_class : public Print {
 
     void command(uint16_t cmd);
 
+    inline void send(String key, String value)    { this->println(key+":"+value); }
+    inline String key()                           { return this->_key;   }
+    inline String value()                         { return this->_value; }
+
     //virtual
     size_t write(uint8_t);
     size_t write(const uint8_t *buffer, size_t size);
   private:
     String _data;
+    String _key;
+    String _value;
+    void   extract_key_value();
     HardwareSerial * _hw_serial=NULL;
 #if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
     SoftwareSerial * _sw_serial=NULL;
