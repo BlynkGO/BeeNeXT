@@ -148,6 +148,7 @@ size_t BeeNeXT_class::write(uint8_t data){
     return sz+4;
   }
 #endif
+  return 0;
 }
 
 size_t BeeNeXT_class::write(const uint8_t *buffer, size_t size){
@@ -163,6 +164,7 @@ size_t BeeNeXT_class::write(const uint8_t *buffer, size_t size){
     return sz + 4;
   }
 #endif
+  return 0;
 }
 
 
