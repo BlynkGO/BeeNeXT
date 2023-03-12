@@ -19,7 +19,7 @@ void BeeNeXT_class::begin(HardwareSerial *serial){
   pinMode(18,OUTPUT);
   digitalWrite(18, LOW); // ทำขา 18 เป็น GND
 #endif
-  Serial2.begin(115200);  // RX19 ; TX20
+  Serial2.begin(9600);  // RX19 ; TX20
   _hw_serial = &Serial2;
 #else
   _hw_serial = (serial == NULL)? &Serial : serial; 
@@ -41,8 +41,9 @@ void BeeNeXT_class::begin(unsigned long baud, uint8_t rx, uint8_t tx){
     _sw_serial->setTimeout(50);
   }
 }
+
 void BeeNeXT_class::begin(uint8_t rx, uint8_t tx){
-  this->begin(115200, rx,tx);
+  this->begin(9600, rx,tx);
 }
 #endif //#if BEENEXT_USE_SOFTWARESERIAL
 
@@ -159,6 +160,7 @@ size_t BeeNeXT_class::write(const uint8_t *buffer, size_t size){
   }
 #if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
   else if(_sw_serial){
+    // Serial.printf("[BeeNeXT] SoftSerial printf : [BN]%.*s", size, buffer);
     _sw_serial->write('[');_sw_serial->write('B');_sw_serial->write('N');_sw_serial->write(']');
     size_t sz = _sw_serial->write(buffer, size);
     return sz + 4;

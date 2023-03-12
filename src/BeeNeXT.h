@@ -48,11 +48,13 @@ class BeeNeXT_class : public Print {
     // ให้ HW Serial ที่ใช้ให้ HW Serial นั้นเริ่มทำงานก่อนเรียก API นี้
     void begin(HardwareSerial *serial=NULL );  
     void begin(HardwareSerial &serial );
+    inline HardwareSerial *HardSerial()             { return _hw_serial; }
     
 #if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
     // API begin(..) นี้ จะใช้ SW Serial
     void begin(unsigned long baud, uint8_t rx, uint8_t tx);
     void begin(uint8_t rx, uint8_t tx);
+    inline SoftwareSerial *SoftSerial()             { return _sw_serial; }
 #endif
 // #if CONFIG_IDF_TARGET_ESP32S3
 //     void begin(unsigned long baud, uint8_t rx, uint8_t tx);
