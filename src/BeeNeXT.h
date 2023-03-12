@@ -65,18 +65,20 @@ class BeeNeXT_class : public Print {
 
     void update();
 
-    inline String toString()      { return _data;               }
-    inline int    toInt()         { return _data.toInt();       }
-    inline float  toFloat()       { return _data.toFloat();     }
-    inline float  toDouble()      { return _data.toDouble();    }
-    inline bool   toBool()        { return (bool)_data.toInt(); }
-    inline const char* c_str()    { return _data.c_str();       }
+    inline String data()          { return _data;  }
+    inline String key()           { return _key;   }
+    inline String value()         { return _value; }
+
+    inline String toString()      { return (_key=="")? _data                : _value;               }
+    inline int    toInt()         { return (_key=="")? _data.toInt()        : _value.toInt();       }
+    inline float  toFloat()       { return (_key=="")? _data.toFloat()      : _value.toFloat();     }
+    inline float  toDouble()      { return (_key=="")? _data.toDouble()     : _value.toDouble();    }
+    inline bool   toBool()        { return (_key=="")? (bool)_data.toInt()  : (bool)_value.toInt(); }
+    inline const char* c_str()    { return (_key=="")? _data.c_str()        : _value.c_str();       }
 
     void command(uint16_t cmd);
 
     inline void send(String key, String value)    { this->println(key+":"+value); }
-    inline String key()                           { return this->_key;   }
-    inline String value()                         { return this->_value; }
 
     //virtual
     size_t write(uint8_t);
