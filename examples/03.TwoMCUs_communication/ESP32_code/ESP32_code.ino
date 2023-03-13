@@ -1,7 +1,9 @@
 #include <WiFi.h>
 #include <BeeNeXT.h>
 
-#define LED_PIN    5
+#define SSID        "------------------"
+#define PASSWORD    "------------------"
+#define LED_PIN     5
 
 void setup() {
   Serial.begin(115200); Serial.println();

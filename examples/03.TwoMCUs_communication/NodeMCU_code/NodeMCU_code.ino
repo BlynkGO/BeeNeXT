@@ -1,7 +1,10 @@
 #include <ESP8266WiFi.h>
 #include <BeeNeXT.h>
 
-#define LED_PIN    2
+#define SSID        "------------------"
+#define PASSWORD    "------------------"
+#define LED_PIN     2
+
 
 void setup() {
   Serial.begin(115200); Serial.println();
@@ -48,6 +51,5 @@ BEENEXT_DATA(){
     Serial.printf("[HUMID] %.2f\n", humid);    
   }
 }
-
 
 

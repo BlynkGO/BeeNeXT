@@ -73,7 +73,10 @@ class BeeNeXT_class : public Print {
     // ให้ HW Serial ที่ใช้ให้ HW Serial นั้นเริ่มทำงานก่อนเรียก API นี้
     void begin(HardwareSerial *serial=NULL );  
     void begin(HardwareSerial &serial );
-    inline HardwareSerial *HardSerial()             { return _hw_serial; }
+    inline HardwareSerial *HardSerial()             { return _hw_serial;    }
+
+    inline void HardSerial(HardwareSerial* serial)  { this->end(); _hw_serial = serial;   } // แบบ HardwareSerial ต้อง begin(..) เอง
+    inline void HardSerial(HardwareSerial& serial)  { this->end(); _hw_serial = &serial;  } // แบบ HardwareSerial ต้อง begin(..) เอง
     
 #if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
     // API begin(..) นี้ จะใช้ SW Serial
@@ -82,6 +85,9 @@ class BeeNeXT_class : public Print {
     void begin(SoftwareSerial *softserial);
     void begin(SoftwareSerial &softserial);
     inline SoftwareSerial *SoftSerial()             { return _sw_serial; }
+
+    inline void SoftSerial(SoftwareSerial* serial)  { this->end(); _sw_serial = serial;   } // แบบ SoftwareSerial ต้อง begin(..) เอง
+    inline void SoftSerial(SoftwareSerial& serial)  { this->end(); _sw_serial = &serial;  } // แบบ SoftwareSerial ต้อง begin(..) เอง
 #endif
 // #if CONFIG_IDF_TARGET_ESP32S3
 //     void begin(unsigned long baud, uint8_t rx, uint8_t tx);
@@ -107,7 +113,7 @@ class BeeNeXT_class : public Print {
 
     inline void send(String key, String value)                      { this->println(key+":"+value);                     }
     inline void send(String key, int value)                         { this->send(key,String(value));                    }
-    inline void send(String key, float  value, uint8_t decimal=2)   { this->send(key,String(value,(uint32_t)decimal));  }
+    inline void send(String key, float  value, uint8_t decimal)     { this->send(key,String(value,(uint32_t)decimal));  }
     inline void send(String key, double value, uint8_t decimal)     { this->send(key,String(value,(uint32_t)decimal));  }
     inline void send(String key, const char* value)                 { this->send(key,String(value));                    }
     inline void send(String key, char* value)                       { this->send(key,String(value));                    }
