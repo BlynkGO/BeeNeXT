@@ -1,7 +1,32 @@
 #ifndef __BEENEXT_H__
 #define __BEENEXT_H__
 
-#define BEENEXT_VERSION     1.0.3
+/** Major version number (X.x.x) */
+#define BEENEXT_VERSION_MAJOR   1
+/** Minor version number (x.X.x) */
+#define BEENEXT_VERSION_MINOR   0
+/** Patch version number (x.x.X) */
+#define BEENEXT_VERSION_PATCH   4
+
+#define BEENEXT_VERSION_TEXT    (String(BEENEXT_VERSION_MAJOR)+"."+String(BEENEXT_VERSION_MINOR)+"."+String(BEENEXT_VERSION_PATCH))
+
+/**
+ * Macro to convert IDF version number into an integer
+ *
+ * To be used in comparisons, such as BEENEXT_VERSION >= BEENEXT_VERSION_VAL(3, 0, 0)
+ */
+#define BEENEXT_VERSION_VAL(major, minor, patch) ((major << 16) | (minor << 8) | (patch))
+
+/**
+ * Current IDF version, as an integer
+ *
+ * To be used in comparisons, such as BLYNKGO_VERSION >= BLYNKGO_VERSION_VAL(3, 0, 0)
+ */
+#define BEENEXT_VERSION  BEENEXT_VERSION_VAL( BLYNKGO_VERSION_MAJOR, \
+                                              BLYNKGO_VERSION_MINOR, \
+                                              BLYNKGO_VERSION_PATCH)
+
+
 
 // #include "../../config/blynkgo_config.h"
 #define BEENEXT
@@ -54,6 +79,8 @@ class BeeNeXT_class : public Print {
     // API begin(..) นี้ จะใช้ SW Serial
     void begin(unsigned long baud, uint8_t rx, uint8_t tx);
     void begin(uint8_t rx, uint8_t tx);
+    void begin(SoftwareSerial *softserial);
+    void begin(SoftwareSerial &softserial);
     inline SoftwareSerial *SoftSerial()             { return _sw_serial; }
 #endif
 // #if CONFIG_IDF_TARGET_ESP32S3

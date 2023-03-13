@@ -34,7 +34,8 @@ void BeeNeXT_class::begin(HardwareSerial &serial ){
 #if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
 void BeeNeXT_class::begin(unsigned long baud, uint8_t rx, uint8_t tx){
   this->end();
-  _sw_serial = new SoftwareSerial();
+  if(_sw_serial==NULL)
+    _sw_serial =  new SoftwareSerial();
   if(_sw_serial != NULL) {
     _is_swserial_alloced = true;
     _sw_serial->begin(baud, rx, tx);
@@ -45,6 +46,18 @@ void BeeNeXT_class::begin(unsigned long baud, uint8_t rx, uint8_t tx){
 void BeeNeXT_class::begin(uint8_t rx, uint8_t tx){
   this->begin(9600, rx,tx);
 }
+
+void BeeNeXT_class::begin(SoftwareSerial *softserial) {
+  this->end();
+  _sw_serial = softserial;
+  _sw_serial->begin(9600);
+  _sw_serial->setTimeout(50);
+}
+
+void BeeNeXT_class::begin(SoftwareSerial &softserial){
+  this->begin(&softserial);
+}
+
 #endif //#if BEENEXT_USE_SOFTWARESERIAL
 
 // #if defined(CONFIG_IDF_TARGET_ESP32S3)
