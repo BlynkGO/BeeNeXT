@@ -82,6 +82,9 @@ class BeeNeXT_class : public Print {
     inline void send(String key, int value)                         { this->send(key,String(value));                    }
     inline void send(String key, float  value, uint8_t decimal=2)   { this->send(key,String(value,(uint32_t)decimal));  }
     inline void send(String key, double value, uint8_t decimal)     { this->send(key,String(value,(uint32_t)decimal));  }
+    inline void send(String key, const char* value)                 { this->send(key,String(value));                    }
+    inline void send(String key, char* value)                       { this->send(key,String(value));                    }
+    inline bool found_key()                                         { return (_key != "");                              }
 
     //virtual
     size_t write(uint8_t);
