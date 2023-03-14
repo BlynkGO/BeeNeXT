@@ -51,17 +51,27 @@
   #include "libs/SoftwareSerial/SoftwareSerial.h"
 #endif
 
-#define BEENEXT_DATA()      void BeeNeXT_onData()
-#define SERIAL_DATA()       void BeeNeXT_onSerialData()
+#define BEENEXT_DATA()          void BeeNeXT_onData()
+#define SERIAL_DATA()           void BeeNeXT_onSerialData()
+#define BEENEXT_CONNECTED()     void BeeNeXT_onConnected()
+#define BEENEXT_DISCONNECTED()  void BeeNeXT_onDisconnected()
 #ifdef __cplusplus
 extern "C" {
 #endif
   void BeeNeXT_NoOpCbk();
   BEENEXT_DATA();
   SERIAL_DATA();
+  BEENEXT_CONNECTED();
+  BEENEXT_DISCONNECTED();
 #ifdef __cplusplus
 }
 #endif
+
+#define BEENEXT_CONNECTION_TIMEOUT      3000
+
+enum { EVENT_BEENEXT_CONNECTED, EVENT_BEENEXT_DISCONNECTED, EVENT_BEENEXT_DATA, EVENT_SERIAL_DATA };
+typedef uint8_t beenect_event_t;
+
 /**********************************************/
 
 class BeeNeXT_class : public Print {
@@ -91,10 +101,13 @@ class BeeNeXT_class : public Print {
     void end();
 
     void update();
+    inline bool isConnected()     { return _bee_connected;                                          }
+    inline bool connected()       { return _bee_connected;                                          }
 
-    inline String data()          { return _data;  }
-    inline String key()           { return _key;   }
-    inline String value()         { return _value; }
+    inline String data()          { return _data;                                                   }
+    inline void   data(String d)  { _data = d;  this->extract_key_value();                          }
+    inline String key()           { return _key;                                                    }
+    inline String value()         { return _value;                                                  }
 
     inline String toString()      { return (_key=="")? _data                : _value;               }
     inline int    toInt()         { return (_key=="")? _data.toInt()        : _value.toInt();       }
@@ -113,14 +126,25 @@ class BeeNeXT_class : public Print {
     inline void send(String key, char* value)                       { this->send(key,String(value));                    }
     inline bool found_key()                                         { return (_key != "");                              }
 
+    void event_send(beenect_event_t event);
+
     //virtual
     size_t write(uint8_t);
     size_t write(const uint8_t *buffer, size_t size);
+
+
+    // don't call
+    void   set_heartbeat(uint32_t heartbeat_interval);
+    void   set_heartbeat_checker();
+    bool   _bee_connected=false;
+    uint32_t  _millis_heartbeat;
   private:
     String _data;
     String _key;
     String _value;
     void   extract_key_value();
+    SoftTimer _timer_heartbeat;
+    SoftTimer _timer_heartbeat_checker; 
     HardwareSerial * _hw_serial=NULL;
 #if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
     SoftwareSerial * _sw_serial=NULL;

@@ -9,13 +9,13 @@ void setup() {
   // --- แบบใช้ Software Serial ----------
   BeeNeXT.begin( 6 ,  7 );  // BeeNeXT เริ่มทำงานด้วย Soft Serial ขา RX6, TX7
 
-
   pinMode(LED_PIN,OUTPUT);
 
   static SoftTimer timer;
   timer.setInterval(1000,[](){
-    BeeNeXT.send("TEMP" , random(100.0)/10.0 );    // ตัวอย่างส่งแบบ key & value จาก MCU ปัจจุบันไปอีก MCU
-    BeeNeXT.send("HUMID", random(100.0)/10.0 );    // ตัวอย่างส่งแบบ key & value จาก MCU ปัจจุบันไปอีก MCU
+    // คำสั่ง BeeNeXT.send( key, value); สำหรับ ส่งค่า จาก MCU ปัจจุบัน ไปยังอีก MCU
+    BeeNeXT.send("TEMP" , random(100.0)/10.0 );    // ส่งไปยังอีก MCU ด้วย key "TEMP"  และ value ที่ส่ง ส่งได้ทั้ง จำนวนเต็ม, จำนวนจริง หรือ ข้อความก็ได้ ตามต้องการ
+    BeeNeXT.send("HUMID", random(100.0)/10.0 );    // ส่งไปยังอีก MCU ด้วย key "HUMID" และ value ที่ส่ง ส่งได้ทั้ง จำนวนเต็ม, จำนวนจริง หรือ ข้อความก็ได้ ตามต้องการ
   });
 
 }
@@ -23,16 +23,4 @@ void setup() {
 void loop() {
   BeeNeXT.update();
 }
-
-// ตัวอย่าง รับค่า value ที่ส่งมาจาก MCU อื่น ด้วย key "LED" 
-// แล้วนำค่า value มากำหนดให้ led ที่ต่อกับ MCU นี้
-
-BEENEXT_DATA(){
-  if(BeeNeXT.key() == "LED") {                      // เช็คว่า key ที่ส่งมาตรงกับ "LED" หรือไม่
-    bool value = (bool) BeeNeXT.value().toInt();    // เปลี่ยนให้ value ที่ส่งมา ไปเป็นข้อมูลแบบ boolean  ; อาจจะเปลี่ยนไปค่าแบบต่างๆได้เช่น BeeNeXT.toString(), BeeNeXT.toInt(), BeeNeXT.toFloat(), BeeNeXT.toBool()  ได้ตามต้องการ
-    digitalWrite(LED_PIN, value); 
-  }
-}
-
-
 

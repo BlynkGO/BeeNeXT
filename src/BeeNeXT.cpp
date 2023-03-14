@@ -3,8 +3,10 @@
 #if defined(BEENEXT) || BLYNKGO_USE_BEENEXT
 
 void BeeNeXT_NoOpCbk() {}
-BEENEXT_DATA()    __attribute__((weak, alias("BeeNeXT_NoOpCbk")));
-SERIAL_DATA()     __attribute__((weak, alias("BeeNeXT_NoOpCbk")));
+BEENEXT_DATA()          __attribute__((weak, alias("BeeNeXT_NoOpCbk")));
+SERIAL_DATA()           __attribute__((weak, alias("BeeNeXT_NoOpCbk")));
+BEENEXT_CONNECTED()     __attribute__((weak, alias("BeeNeXT_NoOpCbk")));
+BEENEXT_DISCONNECTED()  __attribute__((weak, alias("BeeNeXT_NoOpCbk")));
 
 BeeNeXT_class BeeNeXT;
 
@@ -25,6 +27,12 @@ void BeeNeXT_class::begin(HardwareSerial *serial){
   _hw_serial = (serial == NULL)? &Serial : serial;  // ไม่มีการ serial begin() มาก่อนเอาเอง
 #endif
   _hw_serial->setTimeout(50);
+
+  this->set_heartbeat(1000);
+  this->set_heartbeat_checker();
+
+  static SoftTimer timer;
+  timer.delay(1000,[](){ if(!BeeNeXT.connected()) BeeNeXT_onDisconnected(); });  
 }
 
 void BeeNeXT_class::begin(HardwareSerial &serial ){
@@ -41,6 +49,12 @@ void BeeNeXT_class::begin(unsigned long baud, uint8_t rx, uint8_t tx){
     _sw_serial->begin(baud, rx, tx);
     _sw_serial->setTimeout(50);
   }
+
+  this->set_heartbeat(1000);
+  this->set_heartbeat_checker();
+
+  static SoftTimer timer;
+  timer.delay(1000,[](){ if(!BeeNeXT.connected()) BeeNeXT_onDisconnected(); });  
 }
 
 void BeeNeXT_class::begin(uint8_t rx, uint8_t tx){
@@ -71,6 +85,8 @@ void BeeNeXT_class::begin(SoftwareSerial &softserial){
 // }
 // #endif // #if defined(ESP32)
 
+
+
 void BeeNeXT_class::end(){
   if( _hw_serial != NULL) { 
     _hw_serial->end(); 
@@ -98,6 +114,24 @@ void  BeeNeXT_class::extract_key_value(){
   }
 }
 
+void BeeNeXT_class::set_heartbeat(uint32_t heartbeat_interval){
+  _timer_heartbeat.setInterval(heartbeat_interval,[](){
+    BeeNeXT.send("_bhb_", true);
+  }, true);
+}
+
+void BeeNeXT_class::set_heartbeat_checker(){
+  _timer_heartbeat_checker.setInterval(BEENEXT_CONNECTION_TIMEOUT,[](){
+    if(millis()> BeeNeXT._millis_heartbeat + BEENEXT_CONNECTION_TIMEOUT){
+      if(BeeNeXT._bee_connected) {
+        BeeNeXT._bee_connected = false;
+        BeeNeXT_onDisconnected();
+        BeeNeXT.set_heartbeat(1000);
+      }
+    }
+  }, true);
+}
+
 void BeeNeXT_class::update(){
   if(_hw_serial != NULL) {
     if(_hw_serial->available()){
@@ -106,11 +140,30 @@ void BeeNeXT_class::update(){
         data.replace("[BN]", "");
         _data = data;
         this->extract_key_value();
-        BeeNeXT_onData();
+        if( _key == "_bhb_"){
+          _millis_heartbeat = millis();
+          if( (bool) _value.toInt() != _bee_connected ) {
+            _bee_connected = _value.toInt();
+            if(_bee_connected ) {
+              BeeNeXT_onConnected();
+              this->set_heartbeat(BEENEXT_CONNECTION_TIMEOUT);
+            }else {
+              BeeNeXT_onDisconnected();
+              this->set_heartbeat(1000);
+            }
+          }
+        }else{
+          BeeNeXT_onData();
+        }
+        _data  = "";
+        _key   = "";
+        _value = "";
       }else{
         _data = data;
-        this->extract_key_value();
         BeeNeXT_onSerialData();
+        _data  = "";
+        _key   = "";
+        _value = "";
       }
     }
   }
@@ -122,11 +175,31 @@ void BeeNeXT_class::update(){
         data.replace("[BN]", "");
         _data = data;
         this->extract_key_value();
-        BeeNeXT_onData();
+        if( _key == "_bhb_"){
+          _millis_heartbeat = millis();
+          if( (bool) _value.toInt() != _bee_connected ) {
+            _bee_connected = _value.toInt();
+            if(_bee_connected ) {
+              BeeNeXT_onConnected();
+              this->set_heartbeat(BEENEXT_CONNECTION_TIMEOUT);
+            }else {
+              BeeNeXT_onDisconnected();
+              this->set_heartbeat(1000);
+            }
+          }
+        }else{
+          BeeNeXT_onData();
+        }
+
+        _data  = "";
+        _key   = "";
+        _value = "";
       }else{
         _data = data;
-        this->extract_key_value();
         BeeNeXT_onSerialData();
+        _data  = "";
+        _key   = "";
+        _value = "";
       }
     }
   }
@@ -146,6 +219,22 @@ void BeeNeXT_class::command(uint16_t cmd) {
   }
 }
 
+void BeeNeXT_class::event_send(beenect_event_t event){
+  switch(event){
+    case EVENT_BEENEXT_CONNECTED:
+      BeeNeXT_onConnected();
+      break;
+    case EVENT_BEENEXT_DISCONNECTED:
+      BeeNeXT_onDisconnected();
+      break;
+    case EVENT_BEENEXT_DATA:
+      BeeNeXT_onData();
+      break;
+    case EVENT_SERIAL_DATA:
+      BeeNeXT_onSerialData();
+      break;
+  }
+}
 //------------------------------------------------------------
 //virtual function
 size_t BeeNeXT_class::write(uint8_t data){
