@@ -13,7 +13,7 @@ BeeNeXT_class::~BeeNeXT_class(){
 }
 
 void BeeNeXT_class::begin(HardwareSerial *serial){
-  this->end();
+  this->end();    // serial ของเดิม ไม่ว่าจะ hard serial หรือ soft serial ที่ใช้อยู่เดิม ให้ ยกเลิกไปก่อน
 #if CONFIG_IDF_TARGET_ESP32S3
 #if defined(BEENEXT_4_3) ||  defined(BEENEXT_4_3C) ||  defined(BEENEXT_4_3IPS)
   pinMode(18,OUTPUT);
@@ -22,7 +22,7 @@ void BeeNeXT_class::begin(HardwareSerial *serial){
   Serial2.begin(9600);  // RX19 ; TX20
   _hw_serial = &Serial2;
 #else
-  _hw_serial = (serial == NULL)? &Serial : serial; 
+  _hw_serial = (serial == NULL)? &Serial : serial;  // ไม่มีการ serial begin() มาก่อนเอาเอง
 #endif
   _hw_serial->setTimeout(50);
 }
@@ -50,7 +50,6 @@ void BeeNeXT_class::begin(uint8_t rx, uint8_t tx){
 void BeeNeXT_class::begin(SoftwareSerial *softserial) {
   this->end();
   _sw_serial = softserial;
-  _sw_serial->begin(9600);
   _sw_serial->setTimeout(50);
 }
 

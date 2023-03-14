@@ -71,23 +71,17 @@ class BeeNeXT_class : public Print {
 
     // API begin(..) นี้ จะใช้ HW Serial
     // ให้ HW Serial ที่ใช้ให้ HW Serial นั้นเริ่มทำงานก่อนเรียก API นี้
-    void begin(HardwareSerial *serial=NULL );  
-    void begin(HardwareSerial &serial );
+    void begin(HardwareSerial *serial=NULL );       // ต้อง begin() ของ serial มาก่อนเอาเอง ก่อนเรียกคำสั่งนี้
+    void begin(HardwareSerial &serial );            // ต้อง begin() ของ serial มาก่อนเอาเอง ก่อนเรียกคำสั่งนี้
     inline HardwareSerial *HardSerial()             { return _hw_serial;    }
 
-    inline void HardSerial(HardwareSerial* serial)  { this->end(); _hw_serial = serial;   } // แบบ HardwareSerial ต้อง begin(..) เอง
-    inline void HardSerial(HardwareSerial& serial)  { this->end(); _hw_serial = &serial;  } // แบบ HardwareSerial ต้อง begin(..) เอง
-    
 #if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
     // API begin(..) นี้ จะใช้ SW Serial
     void begin(unsigned long baud, uint8_t rx, uint8_t tx);
     void begin(uint8_t rx, uint8_t tx);
-    void begin(SoftwareSerial *softserial);
-    void begin(SoftwareSerial &softserial);
+    void begin(SoftwareSerial *softserial);         // ต้อง begin() ของ serial มาก่อนเอาเอง ก่อนเรียกคำสั่งนี้
+    void begin(SoftwareSerial &softserial);         // ต้อง begin() ของ serial มาก่อนเอาเอง ก่อนเรียกคำสั่งนี้
     inline SoftwareSerial *SoftSerial()             { return _sw_serial; }
-
-    inline void SoftSerial(SoftwareSerial* serial)  { this->end(); _sw_serial = serial;   } // แบบ SoftwareSerial ต้อง begin(..) เอง
-    inline void SoftSerial(SoftwareSerial& serial)  { this->end(); _sw_serial = &serial;  } // แบบ SoftwareSerial ต้อง begin(..) เอง
 #endif
 // #if CONFIG_IDF_TARGET_ESP32S3
 //     void begin(unsigned long baud, uint8_t rx, uint8_t tx);
