@@ -9,6 +9,7 @@ BEENEXT_CONNECTED()     __attribute__((weak, alias("BeeNeXT_NoOpCbk")));
 BEENEXT_DISCONNECTED()  __attribute__((weak, alias("BeeNeXT_NoOpCbk")));
 
 BeeNeXT_class BeeNeXT;
+static SoftTimer timer_delay;
 
 BeeNeXT_class::~BeeNeXT_class(){
   this->end();
@@ -28,12 +29,16 @@ void BeeNeXT_class::begin(HardwareSerial *serial){
   _hw_serial = (serial == NULL)? &Serial : serial;  // ไม่มีการ serial begin() มาก่อนเอาเอง
 #endif
   _hw_serial->setTimeout(50);
-
+  _hw_serial->flush();
   this->set_heartbeat(1000);
   this->set_heartbeat_checker();
 
-  static SoftTimer timer;
-  timer.delay(1000,[](){ if(!BeeNeXT.connected()) BeeNeXT_onDisconnected(); });  
+#if defined(ESP8266) || defined(ESP32)
+  timer_delay.delay(1000,[](){ if(!BeeNeXT.connected()) BeeNeXT_onDisconnected(); });  
+#else
+  delay(1000);
+  if(!BeeNeXT.connected()) BeeNeXT_onDisconnected();
+#endif
 }
 
 void BeeNeXT_class::begin(HardwareSerial &serial ){
@@ -49,13 +54,18 @@ void BeeNeXT_class::begin(unsigned long baud, uint8_t rx, uint8_t tx){
     _is_swserial_alloced = true;
     _sw_serial->begin(baud, rx, tx);
     _sw_serial->setTimeout(50);
+    _sw_serial->flush();
   }
-
   this->set_heartbeat(1000);
   this->set_heartbeat_checker();
 
-  static SoftTimer timer;
-  timer.delay(1000,[](){ if(!BeeNeXT.connected()) BeeNeXT_onDisconnected(); });  
+#if defined(ESP8266) || defined(ESP32)
+  timer_delay.delay(1000,[](){ if(!BeeNeXT.connected()) BeeNeXT_onDisconnected(); });  
+#else
+  delay(1000);
+  if(!BeeNeXT.connected()) BeeNeXT_onDisconnected();
+#endif
+ 
 }
 
 void BeeNeXT_class::begin(uint8_t rx, uint8_t tx){
@@ -245,6 +255,7 @@ void BeeNeXT_class::event_send(beenect_event_t event){
 //------------------------------------------------------------
 //virtual function
 size_t BeeNeXT_class::write(uint8_t data){
+  if(!this->isConnected()) return 0;
   if(_hw_serial){
     _hw_serial->write('[');_hw_serial->write('B');_hw_serial->write('N');_hw_serial->write(']');
     size_t sz = _hw_serial->write(data);
@@ -261,6 +272,7 @@ size_t BeeNeXT_class::write(uint8_t data){
 }
 
 size_t BeeNeXT_class::write(const uint8_t *buffer, size_t size){
+  if(!this->isConnected()) return 0;
   if(_hw_serial){
     _hw_serial->write('[');_hw_serial->write('B');_hw_serial->write('N');_hw_serial->write(']');
     size_t sz = _hw_serial->write(buffer, size);

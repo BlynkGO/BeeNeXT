@@ -23,6 +23,8 @@ class SoftTimer {
   public:
     SoftTimer();
 
+    void init();
+
     void setInterval(unsigned long period_ms, swtimer_cb_t fn, bool start_first=false);
     void setInterval(unsigned long period_ms, swtimer_param_cb_t fn, void* param, bool start_first=false);
 

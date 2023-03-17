@@ -6,6 +6,9 @@ ll_t SoftTimer::swtimer_ll;
 // ll_t swtimer_ll;
 
 SoftTimer::SoftTimer(){
+}
+
+void SoftTimer::init(){
   if(!SoftTimer::_ll_inited){
     // ll_init(&SoftTimer::swtimer_ll, sizeof(swtimer_t));
     ll_init(&swtimer_ll, sizeof(swtimer_t));
@@ -14,6 +17,7 @@ SoftTimer::SoftTimer(){
 }
 
 void SoftTimer::setInterval(unsigned long period_ms, swtimer_cb_t fn, bool start_first){
+  if(!SoftTimer::_ll_inited) this->init();
   this->del();
   this->_swtimer_id = SoftTimer::add_swtimer(SWTIMER_TYPE_INTERVAL, period_ms, fn);
   if(start_first){
@@ -22,6 +26,7 @@ void SoftTimer::setInterval(unsigned long period_ms, swtimer_cb_t fn, bool start
 }
 
 void SoftTimer::setInterval(unsigned long period_ms, swtimer_param_cb_t fn, void* param, bool start_first){
+  if(!SoftTimer::_ll_inited) this->init();
   this->del();
   this->_swtimer_id = SoftTimer::add_swtimer(SWTIMER_TYPE_INTERVAL, period_ms, fn, param);
   if(start_first){
@@ -30,6 +35,7 @@ void SoftTimer::setInterval(unsigned long period_ms, swtimer_param_cb_t fn, void
 }
 
 void SoftTimer::pause(){
+  if(!SoftTimer::_ll_inited) this->init();
   swtimer_t* _cur_node = SoftTimer::find_swtimer(this->_swtimer_id);
   if( _cur_node->type == SWTIMER_TYPE_INTERVAL ){
     _cur_node->pause = true;
@@ -37,6 +43,7 @@ void SoftTimer::pause(){
 }
 
 void SoftTimer::replay(){
+  if(!SoftTimer::_ll_inited) this->init();
   swtimer_t* _cur_node = SoftTimer::find_swtimer(this->_swtimer_id);
   if( _cur_node->type == SWTIMER_TYPE_INTERVAL ){
     _cur_node->pause = false;
@@ -44,6 +51,7 @@ void SoftTimer::replay(){
 }
 
 void SoftTimer::delay(unsigned long delay_ms, swtimer_cb_t fn, bool start_first){
+  if(!SoftTimer::_ll_inited) this->init();
   this->del();
   this->_swtimer_id = SoftTimer::add_swtimer(SWTIMER_TYPE_DELAY, delay_ms, fn);
   if(start_first){
@@ -52,6 +60,7 @@ void SoftTimer::delay(unsigned long delay_ms, swtimer_cb_t fn, bool start_first)
 }
 
 void SoftTimer::delay(unsigned long delay_ms, swtimer_param_cb_t fn, void* param, bool start_first){
+  if(!SoftTimer::_ll_inited) this->init();
   this->del();
   this->_swtimer_id = SoftTimer::add_swtimer(SWTIMER_TYPE_DELAY, delay_ms, fn, param);
   if(start_first){
