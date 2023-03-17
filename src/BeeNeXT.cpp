@@ -136,7 +136,10 @@ void BeeNeXT_class::set_heartbeat_checker(){
 void BeeNeXT_class::update(){
   if(_hw_serial != NULL) {
     if(_hw_serial->available()){
+      _hw_serial->flush();
       String data = _hw_serial->readStringUntil('\n'); _data.trim();
+      // Serial.print("[1] ");
+      // Serial.println(data);
       if(data.startsWith("[BN]")){
         data.replace("[BN]", "");
         _data = data;
@@ -171,7 +174,10 @@ void BeeNeXT_class::update(){
 #if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
   else if(_sw_serial !=NULL ){
     if(_sw_serial->available()){
+      _sw_serial->flush();
       String data = _sw_serial->readStringUntil('\n'); _data.trim();
+      // Serial.print("[2] ");
+      // Serial.println(data);
       if(data.startsWith("[BN]")){
         data.replace("[BN]", "");
         _data = data;
