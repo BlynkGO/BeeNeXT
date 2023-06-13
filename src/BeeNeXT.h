@@ -6,7 +6,7 @@
 /** Minor version number (x.X.x) */
 #define BEENEXT_VERSION_MINOR   0
 /** Patch version number (x.x.X) */
-#define BEENEXT_VERSION_PATCH   4
+#define BEENEXT_VERSION_PATCH   5
 
 #define BEENEXT_VERSION_TEXT    (String(BEENEXT_VERSION_MAJOR)+"."+String(BEENEXT_VERSION_MINOR)+"."+String(BEENEXT_VERSION_PATCH))
 
@@ -118,7 +118,8 @@ class BeeNeXT_class : public Print {
 
     void command(uint16_t cmd);
 
-    inline void send(String key, String value)                      { this->println(key+":"+value);                     }
+    // inline void send(String key, String value)                      { this->println(key+":"+value);                     }
+    void send(String key, String value);    // ไม่ได้ใช้ BeeNeXT.write(..) ใช้ HardwareSerial หรือ SoftwareSerial println(..)ออกไป
     inline void send(String key, int value)                         { this->send(key,String(value));                    }
     inline void send(String key, float  value, uint8_t decimal)     { this->send(key,String(value,(uint32_t)decimal));  }
     inline void send(String key, double value, uint8_t decimal)     { this->send(key,String(value,(uint32_t)decimal));  }

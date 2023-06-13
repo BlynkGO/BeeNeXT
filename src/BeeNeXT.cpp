@@ -18,16 +18,25 @@ BeeNeXT_class::~BeeNeXT_class(){
 void BeeNeXT_class::begin(HardwareSerial *serial){
   this->end();    // serial ของเดิม ไม่ว่าจะ hard serial หรือ soft serial ที่ใช้อยู่เดิม ให้ ยกเลิกไปก่อน
 
+  Serial.println("[BeeNeXT] HardwareSerial");
+
 #if CONFIG_IDF_TARGET_ESP32S3
-#if defined(BEENEXT_4_3) ||  defined(BEENEXT_4_3C) ||  defined(BEENEXT_4_3IPS)
-  pinMode(18,OUTPUT);
-  digitalWrite(18, LOW); // ทำขา 18 เป็น GND
-#endif
+  #if defined(BEENEXT_4_3) ||  defined(BEENEXT_4_3C) ||  defined(BEENEXT_4_3IPS)
+    pinMode(18,OUTPUT);
+    digitalWrite(18, LOW); // ทำขา 18 เป็น GND
+  #endif // #if defined(BEENEXT_4_3) ||  defined(BEENEXT_4_3C) ||  defined(BEENEXT_4_3IPS)
+  Serial.println("[BeeNeXT] ESP32S3 begin on Serial2 (19,20)");
+
   Serial2.begin(9600);  // RX19 ; TX20
   _hw_serial = &Serial2;
 #else
+  #if defined(ESP8266)
+    Serial.println("[BeeNeXT] ESP8266 begin on HardwareSerial");
+  #elif defined(ESP32)
+    Serial.printf("[BeeNeXT] ESP32 begin on %s\n", (serial==&Serial)? "Serial" : (serial==&Serial2)? "Serial2" : "Unknown Serial");
+  #endif
   _hw_serial = (serial == NULL)? &Serial : serial;  // ไม่มีการ serial begin() มาก่อนเอาเอง
-#endif
+#endif // #if CONFIG_IDF_TARGET_ESP32S3
   _hw_serial->setTimeout(50);
   _hw_serial->flush();
   this->set_heartbeat(1000);
@@ -74,6 +83,7 @@ void BeeNeXT_class::begin(uint8_t rx, uint8_t tx){
 
 void BeeNeXT_class::begin(SoftwareSerial *softserial) {
   this->end();
+  Serial.println("[BeeNeXT] SoftwareSerial");
   _sw_serial = softserial;
   _sw_serial->setTimeout(50);
 }
@@ -125,6 +135,8 @@ void  BeeNeXT_class::extract_key_value(){
   }
 }
 
+
+
 void BeeNeXT_class::set_heartbeat(uint32_t heartbeat_interval){
   _timer_heartbeat.setInterval(heartbeat_interval,[](){
     BeeNeXT.send("_bhb_", true);
@@ -144,20 +156,27 @@ void BeeNeXT_class::set_heartbeat_checker(){
 }
 
 void BeeNeXT_class::update(){
+#if BEENEXT_USE_SOFTTIMER
+  SoftTimer::run();
+#endif
+
   if(_hw_serial != NULL) {
     if(_hw_serial->available()){
+      // Serial.println("[BeeNeXT] available on HardwareSerial");
 #if defined(ESP8266) || defined(ESP32)
 #else
       _hw_serial->flush();
 #endif
       String data = _hw_serial->readStringUntil('\n'); _data.trim();
       // Serial.print("[1] ");
-      // Serial.println(data);
+      // Serial.print("[BeeNeXT] recv : "); Serial.println(data);
       if(data.startsWith("[BN]")){
         data.replace("[BN]", "");
         _data = data;
         this->extract_key_value();
+        // Serial.printf("[_key] : %s\n", _key.c_str());
         if( _key == "_bhb_"){
+          // Serial.println("[_bhb_] found");
           _millis_heartbeat = millis();
           if( (bool) _value.toInt() != _bee_connected ) {
             _bee_connected = _value.toInt();
@@ -187,13 +206,14 @@ void BeeNeXT_class::update(){
 #if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
   else if(_sw_serial !=NULL ){
     if(_sw_serial->available()){
+      // Serial.println("[BeeNeXT] available on SoftwareSerial");
 #if defined(ESP8266) || defined(ESP32)
 #else
       _sw_serial->flush();
 #endif
       String data = _sw_serial->readStringUntil('\n'); _data.trim();
-      // Serial.print("[2] ");
-      // Serial.println(data);
+      Serial.print("[2] ");
+      Serial.println(data);
       if(data.startsWith("[BN]")){
         data.replace("[BN]", "");
         _data = data;
@@ -228,9 +248,7 @@ void BeeNeXT_class::update(){
   }
 #endif
 
-#if BEENEXT_USE_SOFTTIMER
-  SoftTimer::run();
-#endif
+
 
 }
 
@@ -258,11 +276,22 @@ void BeeNeXT_class::event_send(beenect_event_t event){
       break;
   }
 }
+
+void BeeNeXT_class::send(String key, String value){
+  if( _hw_serial != NULL) { 
+    _hw_serial->println(String("[BN]") + key+":"+value);
+  }
+#if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
+  if( _sw_serial != NULL ){
+    _sw_serial->println(String("[BN]") + key+":"+value);
+  }
+#endif
+}
 //------------------------------------------------------------
 //virtual function
 size_t BeeNeXT_class::write(uint8_t data){
-  if(!this->isConnected()) return 0;
   if(_hw_serial){
+    if(!this->isConnected()) return 0;
     _hw_serial->write('[');_hw_serial->write('B');_hw_serial->write('N');_hw_serial->write(']');
     size_t sz = _hw_serial->write(data);
     return sz+4;
@@ -278,8 +307,9 @@ size_t BeeNeXT_class::write(uint8_t data){
 }
 
 size_t BeeNeXT_class::write(const uint8_t *buffer, size_t size){
-  if(!this->isConnected()) return 0;
   if(_hw_serial){
+    if(!this->isConnected()) return 0;
+    Serial.println("[11]");
     _hw_serial->write('[');_hw_serial->write('B');_hw_serial->write('N');_hw_serial->write(']');
     size_t sz = _hw_serial->write(buffer, size);
     return sz + 4;
@@ -287,6 +317,7 @@ size_t BeeNeXT_class::write(const uint8_t *buffer, size_t size){
 #if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
   else if(_sw_serial){
     // Serial.printf("[BeeNeXT] SoftSerial printf : [BN]%.*s", size, buffer);
+    Serial.println("[22]");
     _sw_serial->write('[');_sw_serial->write('B');_sw_serial->write('N');_sw_serial->write(']');
     size_t sz = _sw_serial->write(buffer, size);
     return sz + 4;
