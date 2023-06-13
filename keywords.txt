@@ -35,6 +35,7 @@ toInt	KEYWORD2
 toFloat	KEYWORD2
 toDouble	KEYWORD2
 toBool	KEYWORD2
+toBytes	KEYWORD2
 c_str	KEYWORD2
 data	KEYWORD2
 key	KEYWORD2
