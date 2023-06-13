@@ -115,11 +115,13 @@ class BeeNeXT_class : public Print {
     inline float  toDouble()      { return (_key=="")? _data.toDouble()     : _value.toDouble();    }
     inline bool   toBool()        { return (_key=="")? (bool)_data.toInt()  : (bool)_value.toInt(); }
     inline const char* c_str()    { return (_key=="")? _data.c_str()        : _value.c_str();       }
+    inline uint8_t* toBytes()     { return (_key=="")? (uint8_t*)_data.c_str()  : (uint8_t*)_value.c_str();       }
 
     void command(uint16_t cmd);
 
     // inline void send(String key, String value)                      { this->println(key+":"+value);                     }
     void send(String key, String value);    // ไม่ได้ใช้ BeeNeXT.write(..) ใช้ HardwareSerial หรือ SoftwareSerial println(..)ออกไป
+    void send(String key, uint8_t* data, size_t data_len);
     inline void send(String key, int value)                         { this->send(key,String(value));                    }
     inline void send(String key, float  value, uint8_t decimal)     { this->send(key,String(value,(uint32_t)decimal));  }
     inline void send(String key, double value, uint8_t decimal)     { this->send(key,String(value,(uint32_t)decimal));  }

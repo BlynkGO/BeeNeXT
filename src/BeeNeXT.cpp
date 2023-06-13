@@ -169,12 +169,12 @@ void BeeNeXT_class::update(){
 #endif
       String data = _hw_serial->readStringUntil('\n'); _data.trim();
       // Serial.print("[1] ");
-      // Serial.print("[BeeNeXT] recv : "); Serial.println(data);
+      Serial.print("[BeeNeXT] recv : "); Serial.println(data);
       if(data.startsWith("[BN]")){
         data.replace("[BN]", "");
         _data = data;
         this->extract_key_value();
-        // Serial.printf("[_key] : %s\n", _key.c_str());
+        Serial.printf("[_key] : %s\n", _key.c_str());
         if( _key == "_bhb_"){
           // Serial.println("[_bhb_] found");
           _millis_heartbeat = millis();
@@ -284,6 +284,21 @@ void BeeNeXT_class::send(String key, String value){
 #if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
   if( _sw_serial != NULL ){
     _sw_serial->println(String("[BN]") + key+":"+value);
+  }
+#endif
+}
+
+void BeeNeXT_class::send(String key, uint8_t* data, size_t data_len){
+  if( _hw_serial != NULL) { 
+    _hw_serial->print(String("[BN]") + key+":");
+    _hw_serial->write(data, data_len);
+    _hw_serial->println();
+  }
+#if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
+  if( _sw_serial != NULL ){
+    _sw_serial->print(String("[BN]") + key+":");
+    _sw_serial->write(data, data_len);
+    _sw_serial->println();
   }
 #endif
 }
