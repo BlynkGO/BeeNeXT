@@ -169,12 +169,12 @@ void BeeNeXT_class::update(){
 #endif
       String data = _hw_serial->readStringUntil('\n'); _data.trim();
       // Serial.print("[1] ");
-      Serial.print("[BeeNeXT] recv : "); Serial.println(data);
+      // Serial.print("[BeeNeXT] recv : "); Serial.println(data);
       if(data.startsWith("[BN]")){
         data.replace("[BN]", "");
         _data = data;
         this->extract_key_value();
-        Serial.printf("[_key] : %s\n", _key.c_str());
+        // Serial.printf("[_key] : %s\n", _key.c_str());
         if( _key == "_bhb_"){
           // Serial.println("[_bhb_] found");
           _millis_heartbeat = millis();
