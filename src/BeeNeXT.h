@@ -6,7 +6,7 @@
 /** Minor version number (x.X.x) */
 #define BEENEXT_VERSION_MINOR   0
 /** Patch version number (x.x.X) */
-#define BEENEXT_VERSION_PATCH   5
+#define BEENEXT_VERSION_PATCH   6
 
 #define BEENEXT_VERSION_TEXT    (String(BEENEXT_VERSION_MAJOR)+"."+String(BEENEXT_VERSION_MINOR)+"."+String(BEENEXT_VERSION_PATCH))
 
@@ -101,6 +101,8 @@ class BeeNeXT_class : public Print {
     void end();
 
     void update();
+    void enable(bool en);
+
     inline bool isConnected()     { return _bee_connected;                                          }
     inline bool connected()       { return _bee_connected;                                          }
 
@@ -141,6 +143,7 @@ class BeeNeXT_class : public Print {
     void   set_heartbeat_checker();
     bool   _bee_connected=false;
     uint32_t  _millis_heartbeat;
+    static bool   _beenext_enable;
   private:
     String _data;
     String _key;
