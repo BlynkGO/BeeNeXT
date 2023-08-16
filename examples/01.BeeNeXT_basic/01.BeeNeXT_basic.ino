@@ -3,7 +3,7 @@
 #define LED_PIN    13
 
 void setup() {
-  Serial.begin(115200); Serial.println();
+  Serial.begin(9600); Serial.println();
   Serial.println("BeeNeXT Test");
 
   // --- แบบใช้ Hardware Serial ----------
@@ -35,8 +35,8 @@ void loop() {
 // แล้วนำค่า value มากำหนดให้ led ที่ต่อกับ MCU นี้
 
 BEENEXT_DATA(){
-  if(BeeNeXT.key() == "LED") {                      // เช็คว่า key ที่ส่งมาตรงกับ "LED" หรือไม่
-    bool value = (bool) BeeNeXT.value().toInt();    // เปลี่ยนให้ value ที่ส่งมา ไปเป็นข้อมูลแบบ boolean  ; อาจจะเปลี่ยนไปค่าแบบต่างๆได้เช่น BeeNeXT.toString(), BeeNeXT.toInt(), BeeNeXT.toFloat(), BeeNeXT.toBool()  ได้ตามต้องการ
+  if(BeeNeXT.key() == "LED") {            // เช็คว่า key ที่ส่งมาตรงกับ "LED" หรือไม่
+    bool value = (bool) BeeNeXT.toInt();  // เปลี่ยนให้ value ที่ส่งมา ไปเป็นข้อมูลแบบ boolean  ; อาจจะเปลี่ยนไปค่าแบบต่างๆได้เช่น BeeNeXT.toString(), BeeNeXT.toInt(), BeeNeXT.toFloat(), BeeNeXT.toBool()  ได้ตามต้องการ
     digitalWrite(LED_PIN, value); 
   }
 }
