@@ -172,7 +172,7 @@ class BeeNeXT_class { //: public Print {
     void send(String key, uint8_t *data, uint16_t data_len);
     inline void send(String key, String str)  { this->send(key, (uint8_t *)str.c_str(), str.length()); }
     inline void send(String key, int num)     { this->send(key, String(num)); }
-    inline void send(String key, float f, uint8_t decimal=6)     { this->send(key, String(f,decimal)); }
+    inline void send(String key, float f, unsigned int decimal=6)     { this->send(key, String(f, decimal)); }
     // inline void send(String key, float f) {  // ดูจะยังทำงานไม่ได้ ?
     //   // แปลงค่า float เป็น byte array
     //   byte floatData[sizeof(float)];
