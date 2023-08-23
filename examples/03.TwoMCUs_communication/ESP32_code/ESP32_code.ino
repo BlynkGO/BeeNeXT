@@ -5,8 +5,8 @@
 #define PASSWORD    "------------------"
 #define LED_PIN     2
 
-#define LED_ON      LOW
-#define LED_OFF     HIGH
+#define LED_ON      HIGH
+#define LED_OFF     LOW
 
 void setup() {
   Serial.begin(115200); Serial.println();
