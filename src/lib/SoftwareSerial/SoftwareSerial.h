@@ -3,10 +3,9 @@
 #ifndef SoftwareSerial_h
 #define SoftwareSerial_h
 
-// #include "../../../../config/blynkgo_config.h"
 
-#define BLYNKGO_USE_BEENEXT   1
-#if defined(BEENEXT) || BLYNKGO_USE_BEENEXT || BLYNKGO_USE_SOFTWARESERIAL
+#include "../../beenext_config.h"
+#if defined(BEENEXT_USE_SOFTWARESERIAL)
 
 //--------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------  ESP
@@ -440,6 +439,6 @@ class SoftwareSerial : public Stream
 
 #endif //#if defined(ESP8266) || defined(ESP32)
 
-#endif //#if BLYNKGO_USE_BEENEXT || BLYNKGO_USE_SOFTWARESERIAL
+#endif //#if defined(BEENEXT_USE_SOFTWARESERIAL)
 
 #endif // #ifndef SoftwareSerial_h

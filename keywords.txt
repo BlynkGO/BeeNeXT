@@ -29,6 +29,7 @@ begin	KEYWORD2
 update	KEYWORD2
 end	KEYWORD2
 enable	KEYWORD2
+heartbeat	KEYWORD2
 connected	KEYWORD2
 isConnected	KEYWORD2
 toString	KEYWORD2

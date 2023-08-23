@@ -22,6 +22,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #ifndef __ghostl_h
 #define __ghostl_h
 
+#include "../../../beenext_config.h"
+#if defined(BEENEXT_USE_SOFTWARESERIAL)
+
 #if defined(ARDUINO_ARCH_SAMD)
 #include <atomic>
 #endif
@@ -90,5 +93,5 @@ namespace std
         return static_cast<typename identity<T>::type&&>(t);
     }
 }
-
+#endif //#if defined(BEENEXT_USE_SOFTWARESERIAL)
 #endif // __ghostl_h

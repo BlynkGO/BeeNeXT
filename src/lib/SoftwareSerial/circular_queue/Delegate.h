@@ -20,6 +20,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #ifndef __Delegate_h
 #define __Delegate_h
 
+#include "../../../beenext_config.h"
+#if defined(BEENEXT_USE_SOFTWARESERIAL)
+
+
 #if defined(ESP8266)
 #include <c_types.h>
 #elif defined(ESP32)
@@ -2126,5 +2130,5 @@ public:
         return *this;
     }
 };
-
+#endif //#if defined(BEENEXT_USE_SOFTWARESERIAL)
 #endif // __Delegate_h

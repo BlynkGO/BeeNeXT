@@ -7,11 +7,12 @@ void setup() {
   Serial.println("BeeNeXT Test");
 
   // --- แบบใช้ Hardware Serial ----------
-  // BeeNeXT.begin();                         // BeeNeXT เริ่มทำงานด้วย Serial
+  // BeeNeXT.begin(&Serial);                  // BeeNeXT เริ่มทำงานด้วย Serial
 
   // --- แบบใช้ Hardware Serial2 ---------
   // Serial2.begin(9600, SERIAL_8N1, 16,17);  // Serial2 ของ ESP32
   // Serial2.begin(9600);                     // Serial2 ของ Arduino MEGA ขา RX16, TX17
+  // Serial2.begin(9600);                     // Serial2 ของ STM32F1C8 ขา PA3 (RX2) และ  PA2 (TX2)
   // BeeNeXT.begin(&Serial2);                 // BeeNeXT เริ่มทำงานด้วย Serial2
 
   // --- แบบใช้ Software Serial ----------

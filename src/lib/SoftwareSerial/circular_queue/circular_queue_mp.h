@@ -20,6 +20,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #ifndef __circular_queue_mp_h
 #define __circular_queue_mp_h
 
+#include "../../../beenext_config.h"
+#if defined(BEENEXT_USE_SOFTWARESERIAL)
+
+
 #include "circular_queue.h"
 
 #ifdef ESP8266
@@ -197,4 +201,5 @@ bool circular_queue_mp<T, ForEachArg>::for_each_requeue(const Delegate<bool(T&),
     return true;
 }
 
+#endif //#if defined(BEENEXT_USE_SOFTWARESERIAL)
 #endif // __circular_queue_mp_h

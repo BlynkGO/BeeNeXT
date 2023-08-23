@@ -20,6 +20,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #ifndef __circular_queue_h
 #define __circular_queue_h
 
+#include "../../../beenext_config.h"
+#if defined(BEENEXT_USE_SOFTWARESERIAL)
+
 #ifdef ARDUINO
 #include <Arduino.h>
 #endif
@@ -390,4 +393,5 @@ bool circular_queue<T, ForEachArg>::for_each_rev_requeue(Delegate<bool(T&), ForE
     return true;
 }
 
+#endif //#if defined(BEENEXT_USE_SOFTWARESERIAL)
 #endif // __circular_queue_h

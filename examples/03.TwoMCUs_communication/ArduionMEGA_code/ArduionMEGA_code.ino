@@ -15,8 +15,8 @@ void setup() {
 
   static SoftTimer timer;
   timer.setInterval(1000,[](){
-    BeeNeXT.send("TEMP" , random(100.0)/10.0 );    // ตัวอย่างส่งแบบ key & value จาก MCU ปัจจุบันไปอีก MCU
-    BeeNeXT.send("HUMID", random(100.0)/10.0 );    // ตัวอย่างส่งแบบ key & value จาก MCU ปัจจุบันไปอีก MCU
+    BeeNeXT.send("TEMP" , (float) random(100.0)/10.0 );    // ตัวอย่างส่งแบบ key & value จาก MCU ปัจจุบันไปอีก MCU
+    BeeNeXT.send("HUMID", (float) random(100.0)/10.0 );    // ตัวอย่างส่งแบบ key & value จาก MCU ปัจจุบันไปอีก MCU
   });
 
 }

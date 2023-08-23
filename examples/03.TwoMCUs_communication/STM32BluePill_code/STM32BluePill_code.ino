@@ -1,13 +1,14 @@
 #include <BeeNeXT.h>
 
-#define LED_PIN    13
+#define LED_PIN    PC13
 
 void setup() {
   Serial.begin(115200); Serial.println();
   Serial.println("BeeNeXT Test");
 
-  // --- แบบใช้ Software Serial ----------
-  BeeNeXT.begin( 6 ,  7 );  // BeeNeXT เริ่มทำงานด้วย Soft Serial ขา RX6, TX7
+  // --- แบบใช้ Serial2 ----------
+  Serial2.begin(9600);    // STM32 BluePill Serial2 ขา PA3, PA2
+  BeeNeXT.begin( &Serial2 );  
 
   pinMode(LED_PIN,OUTPUT);
 
@@ -23,4 +24,3 @@ void setup() {
 void loop() {
   BeeNeXT.update();
 }
-

@@ -21,6 +21,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #ifndef __MULTIDELEGATE_H
 #define __MULTIDELEGATE_H
 
+#include "../../../beenext_config.h"
+#if defined(BEENEXT_USE_SOFTWARESERIAL)
+
+
 #include <iterator>
 #if defined(ESP8266) || defined(ESP32) || !defined(ARDUINO)
 #include <atomic>
@@ -564,4 +568,6 @@ public:
     using delegate::detail::MultiDelegate<Delegate, typename Delegate::target_type, ISQUEUE, QUEUE_CAPACITY>::MultiDelegate;
 };
 
+
+#endif //#if defined(BEENEXT_USE_SOFTWARESERIAL)
 #endif // __MULTIDELEGATE_H

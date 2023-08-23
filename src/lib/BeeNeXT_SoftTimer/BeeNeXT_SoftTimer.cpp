@@ -1,3 +1,7 @@
+#include "../../beenext_config.h"
+
+#if BEENEXT_USE_SOFTTIMER
+
 #include "BeeNeXT_SoftTimer.h"
 
 
@@ -200,3 +204,6 @@ void SoftTimer::run(){
     node = node_next;
   }
 }
+
+
+#endif //#if BEENEXT_USE_SOFTTIMER

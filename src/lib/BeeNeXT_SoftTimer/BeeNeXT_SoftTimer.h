@@ -1,6 +1,10 @@
 #ifndef __BEENEXT_SOFTTIMER_H__
 #define __BEENEXT_SOFTTIMER_H__
 
+#include "../../beenext_config.h"
+
+#if BEENEXT_USE_SOFTTIMER
+
 #include <Arduino.h>
 #include "linklist.h"
 
@@ -56,5 +60,7 @@ class SoftTimer {
     uint16_t _swtimer_id = 0;
 };
 
+
+#endif // BEENEXT_USE_SOFTTIMER
 
 #endif // __BEENEXT_SOFTTIMER_H__
