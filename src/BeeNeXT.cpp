@@ -32,7 +32,26 @@ void BeeNeXT_Class::begin(SoftwareSerial *sw_serial){
   Serial.println("[BeeNeXT] on SoftwareSerial");
   _sw_serial = sw_serial;  // Software Serial ต้อง begin มาเอง
   _sw_serial->setTimeout(50);
+#if defined(ESP8266) || defined(ESP32)
+#else
   _sw_serial->flush();
+#endif
+
+#if BEENEXT_USE_HEARTBEAT && BEENEXT_USE_SOFTTIMER
+  this->init_heartbeat();
+#endif // #if BEENEXT_USE_HEARTBEAT && BEENEXT_USE_SOFTTIMER  
+}
+
+void BeeNeXT_Class::begin(unsigned long baud, uint8_t rx, uint8_t tx){
+  this->end();
+  _sw_serial =  new SoftwareSerial();
+  _is_swserial_alloced = true;
+  _sw_serial->begin(baud, rx, tx );
+  _sw_serial->setTimeout(50);
+#if defined(ESP8266) || defined(ESP32)
+#else
+  _sw_serial->flush();
+#endif
 
 #if BEENEXT_USE_HEARTBEAT && BEENEXT_USE_SOFTTIMER
   this->init_heartbeat();
@@ -208,10 +227,10 @@ void BeeNeXT_Class::update(){
       char ch = _sw_serial->read();
       this->_updateChar(ch);
     }
-// #if defined(ESP8266) || defined(ESP32)
-// #else
+#if defined(ESP8266) || defined(ESP32)
+#else
     _sw_serial->flush();
-// #endif
+#endif
   }
 #endif
 

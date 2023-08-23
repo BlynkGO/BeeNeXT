@@ -2,6 +2,9 @@
 
 #define LED_PIN    PC13
 
+#define LED_ON      LOW
+#define LED_OFF     HIGH
+
 void setup() {
   Serial.begin(115200); Serial.println();
   Serial.println("BeeNeXT Test");
@@ -11,6 +14,7 @@ void setup() {
   BeeNeXT.begin( &Serial2 );  
 
   pinMode(LED_PIN,OUTPUT);
+  digitalWrite(LED_PIN, LED_OFF);
 
   static SoftTimer timer;
   timer.setInterval(1000,[](){

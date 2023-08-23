@@ -119,14 +119,9 @@ public:
 
   void begin(HardwareSerial *hw_serial);
 #if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
+  SoftwareSerial * _sw_serial=NULL;
   void begin(SoftwareSerial *sw_serial);
-
-  inline void begin(unsigned long baud, uint8_t rx, uint8_t tx){
-    _sw_serial =  new SoftwareSerial();
-    _is_swserial_alloced = true;
-    _sw_serial->begin(baud, rx, tx );
-    this->begin(_sw_serial);
-  }
+  void begin(unsigned long baud, uint8_t rx, uint8_t tx);
   inline void begin(uint8_t rx, uint8_t tx) { this->begin(9600,rx,tx); }
 #endif
   void end();
@@ -228,7 +223,7 @@ public:
 private:
   HardwareSerial * _hw_serial=NULL;
 #if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
-  SoftwareSerial * _sw_serial=NULL;
+
   bool  _is_swserial_alloced=false;
 #endif
 
