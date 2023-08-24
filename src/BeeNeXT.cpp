@@ -141,8 +141,12 @@ void BeeNeXT_Class::send(String key, uint8_t *data, uint16_t data_len){
     
   this->protocol_write((uint8_t *)&_checksum, 2);
   this->protocol_println() ;
-
-  ESP_LOGI("BEENEXT_TAG", "Sender Checksum : %d", _checksum);
+#if defined(ESP32)
+  ESP_LOGI("BEENEXT_DEBUG", "Sender Checksum : %d", _checksum);
+#elif BEENEXT_USE_DEBUG
+  DEBUG_PRINT("[BEENEXT_DEBUG] Sender Checksum : ");
+  DEBUG_PRINTLN(_checksum);
+#endif
   delay(1);
 }
 
@@ -226,7 +230,11 @@ void BeeNeXT_Class::_updateChar(char ch){
       if (_recv_PreHeaderChars == sizeof(_preHeader) - 1) {
         if (memcmp(_recv_PreHeader, _preHeader, sizeof(_preHeader) - 1) == 0) {
           // pre-header ถูกต้อง
-          ESP_LOGI("BEENEXT_TAG", "pre-header match!");
+#if defined(ESP32)
+          ESP_LOGI("BEENEXT_DEBUG", "pre-header match!");
+#elif BEENEXT_USE_DEBUG
+          DEBUG_PRINTLN("[BEENEXT_DEBUG] pre-header match!");
+#endif
           _receiveState = BEENEXT_WAIT_FOR_KEY_LENGTH;
         } else {
           // pre-header ไม่ถูกต้อง
@@ -241,7 +249,12 @@ void BeeNeXT_Class::_updateChar(char ch){
     case BEENEXT_WAIT_FOR_KEY_LENGTH:
       _recv_KeyLength = ch;
       _recv_DataLengthBytes = 0;
-      ESP_LOGI("BEENEXT_TAG", "KEY length : %d", _recv_KeyLength);
+#if defined(ESP32)
+      ESP_LOGI("BEENEXT_DEBUG", "KEY length : %d", _recv_KeyLength);
+#elif BEENEXT_USE_DEBUG
+      DEBUG_PRINT("[BEENEXT_DEBUG] KEY length : ");
+      DEBUG_PRINTLN(_recv_KeyLength);
+#endif
       _receiveState = BEENEXT_WAIT_FOR_DATA_LENGTH;
       break;
     case BEENEXT_WAIT_FOR_DATA_LENGTH:
@@ -252,7 +265,12 @@ void BeeNeXT_Class::_updateChar(char ch){
         ((uint8_t *)&_recv_DataLength)[1] = ch;
         _recv_KeyChars = 0;
         memset(_recv_KeyBuffer, sizeof(_recv_KeyBuffer), 0); // ล้าง _recv_KeyBuffer
-        ESP_LOGI("BEENEXT_TAG", "DATA length : %d", _recv_DataLength);
+#if defined(ESP32)
+        ESP_LOGI("BEENEXT_DEBUG", "DATA length : %d", _recv_DataLength);
+#elif BEENEXT_USE_DEBUG
+        DEBUG_PRINT("[BEENEXT_DEBUG] DATA length : ");
+        DEBUG_PRINTLN(_recv_DataLength);
+#endif
         _receiveState = BEENEXT_WAIT_FOR_KEY;
       }
       break;
@@ -262,7 +280,12 @@ void BeeNeXT_Class::_updateChar(char ch){
       if (_recv_KeyChars == _recv_KeyLength) {
         _recv_KeyBuffer[_recv_KeyLength] = 0;  // ตัวปิด string c array
         _recv_DataChars = 0;
-        ESP_LOGI("BEENEXT_TAG", "KEY : %s", _recv_KeyBuffer);
+#if defined(ESP32)
+        ESP_LOGI("BEENEXT_DEBUG", "KEY : %s", _recv_KeyBuffer);
+#elif BEENEXT_USE_DEBUG
+        DEBUG_PRINT("[BEENEXT_DEBUG] KEY : ");
+        DEBUG_PRINTLN(_recv_KeyBuffer);
+#endif
         memset(_recv_DataBuffer, sizeof(_recv_DataBuffer), 0); // ล้าง _recv_DataBuffer
         _receiveState = BEENEXT_WAIT_FOR_DATA;
       }
@@ -291,12 +314,19 @@ void BeeNeXT_Class::_updateChar(char ch){
                   _checksum = CRC16( _checksum, (uint8_t *) _recv_DataBuffer, _recv_DataLength);
         
         if (_recv_Checksum == _checksum) {
-          ESP_LOGI("BEENEXT_TAG", "checksum match!");
-
+#if defined(ESP32)
+          ESP_LOGI("BEENEXT_DEBUG", "checksum match!");
+#elif BEENEXT_USE_DEBUG
+          DEBUG_PRINTLN("[BEENEXT_DEBUG] checksum match!");
+#endif
 
 #if BEENEXT_USE_HEARTBEAT && BEENEXT_USE_SOFTTIMER
           if( this->key() == "_bhb_"){
-            ESP_LOGI("BEENEXT_TAG", "heartbeat found!");
+#if defined(ESP32)
+            ESP_LOGI("BEENEXT_DEBUG", "heartbeat found!");
+#elif BEENEXT_USE_DEBUG
+            DEBUG_PRINTLN("[BEENEXT_DEBUG] heartbeat found!");
+#endif
             _millis_heartbeat = millis();
             if( this->toBool() != _bee_connected ) {
               _bee_connected = this->toBool();
