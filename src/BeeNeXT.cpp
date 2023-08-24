@@ -142,79 +142,9 @@ void BeeNeXT_Class::send(String key, uint8_t *data, uint16_t data_len){
   this->protocol_write((uint8_t *)&_checksum, 2);
   this->protocol_println() ;
 
-  // Serial.printf("[Sender] checksum : %d\n",_checksum);
+  ESP_LOGI("BEENEXT_TAG", "Sender Checksum : %d", _checksum);
   delay(1);
 }
-
-
-// void BeeNeXT_Class::send(String key, uint8_t *data, uint16_t data_len){
-//   if(_hw_serial != NULL) {
-//     // ส่ง pre-header
-//     _hw_serial->write(_preHeader, sizeof(_preHeader) - 1);
-
-//     // ส่งความยาวของ key (1 byte)
-//     uint8_t  keyLength = key.length();
-//     if(keyLength > 32) { keyLength = 32; key[keyLength] = '\0'; }
-//     _hw_serial->write(keyLength);
-
-//     // ส่งความยาวของ data (2 byte)
-//     _hw_serial->write((uint8_t *)&data_len, 2);
-
-//     // ส่ง key
-//     _hw_serial->write(key.c_str(), keyLength);
-
-//     // ส่ง data
-//     _hw_serial->write(data, data_len);
-
-//     // คำนวณ checksum crc16 และ ส่ง checksum
-//     uint16_t  _checksum = CRC16( 0, (uint8_t*)_preHeader, sizeof(_preHeader) - 1);
-//               _checksum = CRC16( _checksum, keyLength);
-//               _checksum = CRC16( _checksum, (uint8_t *)&data_len  , sizeof(data_len));
-//               _checksum = CRC16( _checksum, (uint8_t *)key.c_str(), keyLength);
-//               _checksum = CRC16( _checksum, (uint8_t *)data       , data_len);
-    
-//     _hw_serial->write((uint8_t *)&_checksum, 2);
-//     _hw_serial->println();
-
-//     // Serial.printf("[Sender] checksum : %d\n",_checksum);
-//     delay(1);
-//   }
-// #if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
-//   else if(_sw_serial != NULL) {
-//     // ส่ง pre-header
-//     _sw_serial->write(_preHeader, sizeof(_preHeader) - 1);
-
-//     // ส่งความยาวของ key (1 byte)
-//     uint8_t  keyLength = key.length();
-//     if(keyLength > 32) { keyLength = 32; key[keyLength] = '\0'; }
-//     _sw_serial->write(keyLength);
-
-//     // ส่งความยาวของ data (2 byte)
-//     _sw_serial->write((uint8_t *)&data_len, 2);
-
-//     // ส่ง key
-//     _sw_serial->write(key.c_str(), keyLength);
-
-//     // ส่ง data
-//     _sw_serial->write(data, data_len);
-
-//     // คำนวณ checksum crc16 และ ส่ง checksum
-//     uint16_t  _checksum = CRC16( 0, (uint8_t*)_preHeader, sizeof(_preHeader) - 1);
-//               _checksum = CRC16( _checksum, keyLength);
-//               _checksum = CRC16( _checksum, (uint8_t *)&data_len  , sizeof(data_len));
-//               _checksum = CRC16( _checksum, (uint8_t *)key.c_str(), keyLength);
-//               _checksum = CRC16( _checksum, (uint8_t *)data       , data_len);
-    
-//     _sw_serial->write((uint8_t *)&_checksum, 2);
-//     _sw_serial->println();
-
-//     // Serial.printf("[Sender] checksum : %d\n",_checksum);
-
-//     delay(1);
-//   }
-// #endif
-// }
-
 
 uint16_t BeeNeXT_Class::CRC16(uint16_t crc /*0 = init*/, uint8_t *data, size_t length) {
   if(crc==0) crc = 0xFFFF;
@@ -296,7 +226,7 @@ void BeeNeXT_Class::_updateChar(char ch){
       if (_recv_PreHeaderChars == sizeof(_preHeader) - 1) {
         if (memcmp(_recv_PreHeader, _preHeader, sizeof(_preHeader) - 1) == 0) {
           // pre-header ถูกต้อง
-          // Serial.println("[BeeNeXT] pre-header match!");
+          ESP_LOGI("BEENEXT_TAG", "pre-header match!");
           _receiveState = BEENEXT_WAIT_FOR_KEY_LENGTH;
         } else {
           // pre-header ไม่ถูกต้อง
@@ -311,7 +241,7 @@ void BeeNeXT_Class::_updateChar(char ch){
     case BEENEXT_WAIT_FOR_KEY_LENGTH:
       _recv_KeyLength = ch;
       _recv_DataLengthBytes = 0;
-      // Serial.printf("[BeeNeXT] key len : %d\n", _recv_KeyLength);
+      ESP_LOGI("BEENEXT_TAG", "KEY length : %d", _recv_KeyLength);
       _receiveState = BEENEXT_WAIT_FOR_DATA_LENGTH;
       break;
     case BEENEXT_WAIT_FOR_DATA_LENGTH:
@@ -322,7 +252,7 @@ void BeeNeXT_Class::_updateChar(char ch){
         ((uint8_t *)&_recv_DataLength)[1] = ch;
         _recv_KeyChars = 0;
         memset(_recv_KeyBuffer, sizeof(_recv_KeyBuffer), 0); // ล้าง _recv_KeyBuffer
-        // Serial.printf("[BeeNeXT] data len : %d\n", _recv_DataLength);
+        ESP_LOGI("BEENEXT_TAG", "DATA length : %d", _recv_DataLength);
         _receiveState = BEENEXT_WAIT_FOR_KEY;
       }
       break;
@@ -332,7 +262,7 @@ void BeeNeXT_Class::_updateChar(char ch){
       if (_recv_KeyChars == _recv_KeyLength) {
         _recv_KeyBuffer[_recv_KeyLength] = 0;  // ตัวปิด string c array
         _recv_DataChars = 0;
-        // Serial.printf("[BeeNeXT] key : %s\n", _recv_KeyBuffer);
+        ESP_LOGI("BEENEXT_TAG", "KEY : %s", _recv_KeyBuffer);
         memset(_recv_DataBuffer, sizeof(_recv_DataBuffer), 0); // ล้าง _recv_DataBuffer
         _receiveState = BEENEXT_WAIT_FOR_DATA;
       }
@@ -341,10 +271,6 @@ void BeeNeXT_Class::_updateChar(char ch){
       _recv_DataBuffer[_recv_DataChars] = ch;
       _recv_DataChars++;
       if (_recv_DataChars == _recv_DataLength) {
-        // if( _recv_DataLength == 4) {
-        //   int32_t num = *(int32_t*)_recv_DataBuffer;
-        //   Serial.printf("[BeeNeXT] data : %d\n", num);
-        // }
         _recv_Checksum_Byte = 0;
         _receiveState = BEENEXT_WAIT_FOR_CHECKSUM;
       }
@@ -363,22 +289,14 @@ void BeeNeXT_Class::_updateChar(char ch){
                   _checksum = CRC16( _checksum, (uint8_t *)&_recv_DataLength, sizeof(_recv_DataLength));
                   _checksum = CRC16( _checksum, (uint8_t *) _recv_KeyBuffer , _recv_KeyLength);
                   _checksum = CRC16( _checksum, (uint8_t *) _recv_DataBuffer, _recv_DataLength);
-
-        // Serial.print("[recv checksum] ");
-        // Serial.println(_recv_Checksum);
-        // Serial.print("[calc checksum] ");
-        // Serial.println(_checksum);
         
         if (_recv_Checksum == _checksum) {
-          // if (callback) {
-          //   callback();
-          // }
-          // Serial.println("[recv] checksum OK");
-          // Serial.printf("[Recv] key : %s; data len : %d\n", _recv_KeyBuffer, _recv_DataLength);
+          ESP_LOGI("BEENEXT_TAG", "checksum match!");
+
 
 #if BEENEXT_USE_HEARTBEAT && BEENEXT_USE_SOFTTIMER
           if( this->key() == "_bhb_"){
-            // Serial.println("[_bhb_] found");
+            ESP_LOGI("BEENEXT_TAG", "heartbeat found!");
             _millis_heartbeat = millis();
             if( this->toBool() != _bee_connected ) {
               _bee_connected = this->toBool();
