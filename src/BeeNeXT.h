@@ -1,5 +1,5 @@
 /*
- * เขียนใหม่เป็นอีก protocal นึง เพื่อรองรับ สามารถส่งเป็น data byte array 
+ * เขียนใหม่เป็นอีก protocol นึง เพื่อรองรับ สามารถส่งเป็น data byte array 
  * ตามจำนวนขนาด data size ได้
  *
  */
@@ -219,6 +219,15 @@ public:
 #endif
 
   static bool   _beenext_enable;
+
+  inline void protocol_write(uint8_t *data, uint16_t data_len){
+    if(_hw_serial != NULL)          _hw_serial->write(data, data_len);
+#if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
+    else if(_sw_serial != NULL)     _sw_serial->write(data, data_len);
+#endif
+  }
+  inline void protocol_write(uint8_t data) { this->protocol_write(&data, 1); }
+  inline void protocol_println()           { uint8_t data[2] = {'\r','\n'}; this->protocol_write(data, 2); }
 
 private:
   HardwareSerial * _hw_serial=NULL;
