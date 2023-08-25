@@ -98,6 +98,7 @@ public:
       #endif
     #elif defined(ESP32)
       #if defined BEENEXT_5_0IPS
+        Serial.println("[BeeNeXT] on Serial");
         this->begin(&Serial);
       #else
         Serial2.begin(9600, SERIAL_8N1, 16,17); // Serial2 ของ ESP32 ให้ทำงานบน ขา RX16, TX17
