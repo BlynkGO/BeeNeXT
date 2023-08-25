@@ -25,5 +25,5 @@
 #endif
 
 
-#endif
+#endif // __BEENEXT_CONFIG_H__
 

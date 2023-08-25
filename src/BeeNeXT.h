@@ -34,23 +34,11 @@
 
 #define BEENEXT
 
-// #if defined(__STM32F0__) || defined(__STM32F1__) || defined(__STM32F2__) || defined(__STM32F3__) || defined(__STM32F4__) || defined(__STM32F7__) || defined(__STM32H7__)
-  // #define int8 int8_t
-  // #define uint8 uint8_t
-  // #define uint16 uint16_t
-  // #define int16 int16_t
-  // #define uint32 uint32_t
-  // #define int32 int32_t
-// #endif
-
 /**********************************************/
 #if defined(BEENEXT) || BLYNKGO_USE_BEENEXT
 
 #include <Arduino.h>
 #include "beenext_config.h"
-
-// #if defined(__AVR__ ) && BEENEXT_USE_SOFTWARESERIAL
-
 
 #if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0) 
 #include "lib/SoftwareSerial/SoftwareSerial.h"
@@ -109,8 +97,12 @@ public:
         this->begin(&Serial);
       #endif
     #elif defined(ESP32)
-      Serial2.begin(9600, SERIAL_8N1, 16,17); // Serial2 ของ ESP32 ให้ทำงานบน ขา RX16, TX17
-      this->begin(&Serial2);
+      #if defined BEENEXT_5_0IPS
+        this->begin(&Serial);
+      #else
+        Serial2.begin(9600, SERIAL_8N1, 16,17); // Serial2 ของ ESP32 ให้ทำงานบน ขา RX16, TX17
+        this->begin(&Serial2);
+      #endif
     #elif defined(__STM32F1__)
       Serial2.begin(9600);  // Serial2 ของ Arduino MEGA ขา PA3, PA2
       this->begin(&Serial2);
