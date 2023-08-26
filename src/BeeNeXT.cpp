@@ -187,10 +187,10 @@ void BeeNeXT_Class::update(){
       char ch = _hw_serial->read();
       this->_updateChar(ch);
     }
-// #if defined(ESP8266) || defined(ESP32)
-// #else
+#if defined(ESP8266) || defined(ESP32)
+#else
     _hw_serial->flush();
-// #endif
+#endif
   }
 #if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
   else if(_sw_serial != NULL) {

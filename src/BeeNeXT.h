@@ -97,9 +97,8 @@ public:
         this->begin(&Serial);
       #endif
     #elif defined(ESP32)
-      #if defined BEENEXT_5_0IPS
-        Serial.println("[BeeNeXT] on Serial");
-        this->begin(&Serial);
+      #if defined(BEENEXT_1_28) || defined(BEENEXT_2_4) || defined(BEENEXT_2_4C) || defined(BEENEXT_2_8) || defined(BEENEXT_2_8C) || defined(BEENEXT_3_2) || defined(BEENEXT_3_2C) || defined(BEENEXT_4_3) || defined(BEENEXT_4_3C) || defined(BEENEXT_4_3IPS) || defined(BEENEXT_5_0IPS) || defined(BEENEXT_7_0IPS)
+        this->begin(&Serial);  // ให้เอา R หลังขา RX ออก และ short
       #else
         Serial2.begin(9600, SERIAL_8N1, 16,17); // Serial2 ของ ESP32 ให้ทำงานบน ขา RX16, TX17
         this->begin(&Serial2);
