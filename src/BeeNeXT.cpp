@@ -16,6 +16,10 @@ bool BeeNeXT_Class::_beenext_enable = true;
 void BeeNeXT_Class::begin(HardwareSerial *hw_serial){
   this->end();
   Serial.println("[BeeNeXT] on HardwareSerial");
+#if defined(ESP32)
+  if( hw_serial == &Serial || hw_serial == &Serial2)
+    Serial.printf("[BeeNeXT] ESP32's %s\n", (hw_serial == &Serial)? "Serial" : "Serial2");
+#endif
   _hw_serial = hw_serial;  // ไม่มีการ serial begin() มาก่อนเอาเอง
   _hw_serial->setTimeout(50);
   _hw_serial->flush();
