@@ -148,8 +148,8 @@ void BeeNeXT_Class::send(String key, uint8_t *data, uint16_t data_len){
 #if defined(ESP32)
   ESP_LOGI("BEENEXT_DEBUG", "Sender Checksum : %d", _checksum);
 #elif BEENEXT_USE_DEBUG
-  DEBUG_PRINT("[BEENEXT_DEBUG] Sender Checksum : ");
-  DEBUG_PRINTLN(_checksum);
+  BEENEXT_DEBUG_PRINT("[BEENEXT_DEBUG] Sender Checksum : ");
+  BEENEXT_DEBUG_PRINTLN(_checksum);
 #endif
   delay(1);
 }
@@ -237,7 +237,7 @@ void BeeNeXT_Class::_updateChar(char ch){
 #if defined(ESP32)
           ESP_LOGI("BEENEXT_DEBUG", "pre-header match!");
 #elif BEENEXT_USE_DEBUG
-          DEBUG_PRINTLN("[BEENEXT_DEBUG] pre-header match!");
+          BEENEXT_DEBUG_PRINTLN("[BEENEXT_DEBUG] pre-header match!");
 #endif
           _receiveState = BEENEXT_WAIT_FOR_KEY_LENGTH;
         } else {
@@ -256,8 +256,8 @@ void BeeNeXT_Class::_updateChar(char ch){
 #if defined(ESP32)
       ESP_LOGI("BEENEXT_DEBUG", "KEY length : %d", _recv_KeyLength);
 #elif BEENEXT_USE_DEBUG
-      DEBUG_PRINT("[BEENEXT_DEBUG] KEY length : ");
-      DEBUG_PRINTLN(_recv_KeyLength);
+      BEENEXT_DEBUG_PRINT("[BEENEXT_DEBUG] KEY length : ");
+      BEENEXT_DEBUG_PRINTLN(_recv_KeyLength);
 #endif
       _receiveState = BEENEXT_WAIT_FOR_DATA_LENGTH;
       break;
@@ -272,8 +272,8 @@ void BeeNeXT_Class::_updateChar(char ch){
 #if defined(ESP32)
         ESP_LOGI("BEENEXT_DEBUG", "DATA length : %d", _recv_DataLength);
 #elif BEENEXT_USE_DEBUG
-        DEBUG_PRINT("[BEENEXT_DEBUG] DATA length : ");
-        DEBUG_PRINTLN(_recv_DataLength);
+        BEENEXT_DEBUG_PRINT("[BEENEXT_DEBUG] DATA length : ");
+        BEENEXT_DEBUG_PRINTLN(_recv_DataLength);
 #endif
         _receiveState = BEENEXT_WAIT_FOR_KEY;
       }
@@ -287,8 +287,8 @@ void BeeNeXT_Class::_updateChar(char ch){
 #if defined(ESP32)
         ESP_LOGI("BEENEXT_DEBUG", "KEY : %s", _recv_KeyBuffer);
 #elif BEENEXT_USE_DEBUG
-        DEBUG_PRINT("[BEENEXT_DEBUG] KEY : ");
-        DEBUG_PRINTLN(_recv_KeyBuffer);
+        BEENEXT_DEBUG_PRINT("[BEENEXT_DEBUG] KEY : ");
+        BEENEXT_DEBUG_PRINTLN(_recv_KeyBuffer);
 #endif
         memset(_recv_DataBuffer, sizeof(_recv_DataBuffer), 0); // ล้าง _recv_DataBuffer
         _receiveState = BEENEXT_WAIT_FOR_DATA;
@@ -321,7 +321,7 @@ void BeeNeXT_Class::_updateChar(char ch){
 #if defined(ESP32)
           ESP_LOGI("BEENEXT_DEBUG", "checksum match!");
 #elif BEENEXT_USE_DEBUG
-          DEBUG_PRINTLN("[BEENEXT_DEBUG] checksum match!");
+          BEENEXT_DEBUG_PRINTLN("[BEENEXT_DEBUG] checksum match!");
 #endif
 
 #if BEENEXT_USE_HEARTBEAT && BEENEXT_USE_SOFTTIMER
@@ -329,7 +329,7 @@ void BeeNeXT_Class::_updateChar(char ch){
 #if defined(ESP32)
             ESP_LOGI("BEENEXT_DEBUG", "heartbeat found!");
 #elif BEENEXT_USE_DEBUG
-            DEBUG_PRINTLN("[BEENEXT_DEBUG] heartbeat found!");
+            BEENEXT_DEBUG_PRINTLN("[BEENEXT_DEBUG] heartbeat found!");
 #endif
             _millis_heartbeat = millis();
             if( this->toBool() != _bee_connected ) {

@@ -16,12 +16,11 @@
 #endif
 
 #ifdef BEENEXT_USE_DEBUG
-#define DEBUG_PRINT(x)      Serial.print(x)
-#define DEBUG_PRINTLN(x)    Serial.println(x)
+#define BEENEXT_DEBUG_PRINT(x)      Serial.print(x)
+#define BEENEXT_DEBUG_PRINTLN(x)    Serial.println(x)
 #else
-#define DEBUG_PRINT(x)
-#define DEBUG_PRINTLN(x)
-#define DEBUG_PRINTF(...)
+#define BEENEXT_DEBUG_PRINT(x)
+#define BEENEXT_DEBUG_PRINTLN(x)
 #endif
 
 
