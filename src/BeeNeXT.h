@@ -2,6 +2,11 @@
  * เขียนใหม่เป็นอีก protocol นึง เพื่อรองรับ สามารถส่งเป็น data byte array 
  * ตามจำนวนขนาด data size ได้
  *
+ * Version 3.0.0 :
+ *    - ใช้ BeeNeXT Protocol รันบน UART Bus 
+ *
+ * Version 3.0.1 : @ 20/09/66
+ *    - ให้สามารถปรับเพิ่ม buffer เองได้ กำหนดใน beenext_config.h
  */
 
 #ifndef __BEENEXT_H__
@@ -12,7 +17,7 @@
 /** Minor version number (x.X.x) */
 #define BEENEXT_VERSION_MINOR   0
 /** Patch version number (x.x.X) */
-#define BEENEXT_VERSION_PATCH   0
+#define BEENEXT_VERSION_PATCH   1
 
 #define BEENEXT_VERSION_TEXT    (String(BEENEXT_VERSION_MAJOR)+"."+String(BEENEXT_VERSION_MINOR)+"."+String(BEENEXT_VERSION_PATCH))
 
@@ -231,7 +236,7 @@ private:
   const char _preHeader[5] = "[BN]";
   char     _recv_PreHeader[5] = {0}; // สำหรับเก็บค่า pre-header ที่ส่งเข้ามา
   char     _recv_KeyBuffer[32];     // กำหนดขนาดสูงสุดของ key เป็น 32 (ความยาว key ที่รองรับได้มากที่สุด)
-  uint8_t  _recv_DataBuffer[128];   // กำหนดขนาดสูงสุดของ data เป็น 128 (ความยาวข้อมูลที่รองรับได้มากที่สุด)
+  uint8_t  _recv_DataBuffer[BEENEXT_BUFFER_MAX];   // กำหนดขนาดสูงสุดของ data เป็น BEENEXT_BUFFER_MAX (ความยาวข้อมูลที่รองรับได้มากที่สุด กำหนดใน beenext_config.h)
   uint8_t  _recv_KeyLength;
   uint16_t _recv_DataLength;
 

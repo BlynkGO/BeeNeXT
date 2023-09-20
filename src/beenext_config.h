@@ -8,7 +8,7 @@
 #define BEENEXT_USE_SOFTTIMER           1
 #define BEENEXT_USE_HEARTBEAT           1   // ทำงานได้ต้องเปิด BEENEXT_USE_SOFTTIMER เป็น 1 ด้วย
 #define BEENEXT_USE_DEBUG               0
-
+#define BEENEXT_BUFFER_MAX              128   // 1024
 
 #if defined(__STM32F0__) || defined(__STM32F1__) || defined(__STM32F2__) || defined(__STM32F3__) || defined(__STM32F4__) || defined(__STM32F7__) || defined(__STM32H7__)
   #undef BEENEXT_USE_SOFTWARESERIAL
