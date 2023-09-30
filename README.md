@@ -1,6 +1,6 @@
 # BeeNeXT
 
-ไลบรารี่ ลิขสิทธิ์ สำหรับ ผู้ใช้ จอสัมผัส BeeNeXT  
+**ไลบรารี่ ลิขสิทธิ์ สำหรับ ผู้ใช้ จอสัมผัส BeeNeXT เท่านั้น**  
 ให้ MCU ต่างๆ เช่น Arduino UNO, Arduino MEGA, Arduino Nano, ESP8266, ESP32, STM32 ฯลฯ  
 เชื่อมต่อกับ จอสัมผัส BeeNeXT
 
