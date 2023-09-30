@@ -11,6 +11,10 @@
  * Versoin 3.0.2 : @ 30/09/66
  *    - เพิ่ม mem.h,mem.c ให้ ไม่ต้องติด warning
  *
+ * Versoin 3.0.3 : @ 30/09/66
+ *    - ยกเลิก mem.h,mem.c กลับไปใน free(..) แทน
+ *    - fix ปัญหาสำคัญใช้ memset(..) ผิด แก้ให้ถูกแล้ว (สลับ 2 parameter สุดท้าย)
+ *
  */
 
 #ifndef __BEENEXT_H__

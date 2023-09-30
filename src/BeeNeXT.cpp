@@ -268,7 +268,7 @@ void BeeNeXT_Class::_updateChar(char ch){
       } else {
         ((uint8_t *)&_recv_DataLength)[1] = ch;
         _recv_KeyChars = 0;
-        memset(_recv_KeyBuffer, sizeof(_recv_KeyBuffer), 0); // ล้าง _recv_KeyBuffer
+        memset(_recv_KeyBuffer, 0, sizeof(_recv_KeyBuffer)); // ล้าง _recv_KeyBuffer
 #if defined(ESP32)
         ESP_LOGI("BEENEXT_DEBUG", "DATA length : %d", _recv_DataLength);
 #elif BEENEXT_USE_DEBUG
@@ -290,7 +290,7 @@ void BeeNeXT_Class::_updateChar(char ch){
         BEENEXT_DEBUG_PRINT("[BEENEXT_DEBUG] KEY : ");
         BEENEXT_DEBUG_PRINTLN(_recv_KeyBuffer);
 #endif
-        memset(_recv_DataBuffer, sizeof(_recv_DataBuffer), 0); // ล้าง _recv_DataBuffer
+        memset(_recv_DataBuffer, 0, sizeof(_recv_DataBuffer)); // ล้าง _recv_DataBuffer
         _receiveState = BEENEXT_WAIT_FOR_DATA;
       }
       break;

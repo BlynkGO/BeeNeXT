@@ -10,7 +10,7 @@
 #include <string.h>
 
 #include "linklist.h"
-#include "mem.h"
+// #include "mem.h"
 
 /*********************
  *      DEFINES
@@ -201,7 +201,7 @@ void ll_clear(ll_t * ll_p)
         i_next = ll_get_next(ll_p, i);
 
         ll_remove(ll_p, i);
-        bgo_mem_free(i);
+        free(i);
 
         i = i_next;
     }
