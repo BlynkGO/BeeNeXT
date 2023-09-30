@@ -13,9 +13,5 @@
     "url": "https://web.facebook.com/groups/1314040465469106"
   },
   "frameworks": "arduino",
-  "platforms": "*",
-  "license": {
-    "name": "BlynkGO License",
-    "text": "Copyright © BlynkGO\n\nPermission for BeeNeXT TFT touch screen users only"
-  }
+  "platforms": "*"
 }
