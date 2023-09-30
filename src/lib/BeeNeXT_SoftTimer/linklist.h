@@ -12,7 +12,7 @@ extern "C" {
 /*********************
  *      INCLUDES
  *********************/
-//#include "mem.h"
+#include "mem.h"
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>

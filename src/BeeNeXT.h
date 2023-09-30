@@ -7,6 +7,10 @@
  *
  * Version 3.0.1 : @ 20/09/66
  *    - ให้สามารถปรับเพิ่ม buffer เองได้ กำหนดใน beenext_config.h
+ *
+ * Versoin 3.0.2 : @ 30/09/66
+ *    - เพิ่ม mem.h,mem.c ให้ ไม่ต้องติด warning
+ *
  */
 
 #ifndef __BEENEXT_H__
@@ -17,7 +21,7 @@
 /** Minor version number (x.X.x) */
 #define BEENEXT_VERSION_MINOR   0
 /** Patch version number (x.x.X) */
-#define BEENEXT_VERSION_PATCH   1
+#define BEENEXT_VERSION_PATCH   2
 
 #define BEENEXT_VERSION_TEXT    (String(BEENEXT_VERSION_MAJOR)+"."+String(BEENEXT_VERSION_MINOR)+"."+String(BEENEXT_VERSION_PATCH))
 
