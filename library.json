@@ -1,0 +1,17 @@
+{
+  "name": "BeeNeXT",
+  "keywords": "BeeNeXT Protocol on UART",
+  "description":  "BeeNeXT Protocol on UART for UNO, MEGA, NANO, ESP8266, ESP32, STM32, ...",
+  "homepage": "https://web.facebook.com/groups/1314040465469106",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BlynkGO/BeeNeXT"
+  },
+  "version": "3.0.1",
+  "authors": {
+    "name": "BlynkGO",
+    "url": "https://web.facebook.com/groups/1314040465469106"
+  },
+  "frameworks": "arduino",
+  "platforms": "*"
+}
