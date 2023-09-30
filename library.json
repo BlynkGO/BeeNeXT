@@ -1,7 +1,7 @@
 {
   "name": "BeeNeXT",
   "keywords": "BeeNeXT Protocol on UART",
-  "BeeNeXT Protocol for BeeNeXT Touch screen and various MCUs including UNO, MEGA, NANO, ESP8266, ESP32, STM32, ...",
+  "description": "BeeNeXT Protocol for BeeNeXT Touch screen and various MCUs including UNO, MEGA, NANO, ESP8266, ESP32, STM32, ...",
   "homepage": "https://web.facebook.com/groups/1314040465469106",
   "repository": {
     "type": "git",
