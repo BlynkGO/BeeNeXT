@@ -13,6 +13,8 @@
 #######################################
 
 BeeNeXT	KEYWORD1
+LCD	KEYWORD1
+MCU	KEYWORD1
 
 
 #######################################
@@ -20,6 +22,8 @@ BeeNeXT	KEYWORD1
 #######################################
 
 BEENEXT_DATA	KEYWORD2
+LCD_DATA	KEYWORD2
+MCU_DATA	KEYWORD2
 SERIAL_DATA	KEYWORD2
 BEENEXT_CONNECTED	KEYWORD2
 BEENEXT_DISCONNECTED	KEYWORD2

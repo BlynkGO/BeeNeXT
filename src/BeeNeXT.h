@@ -15,6 +15,9 @@
  *    - ยกเลิก mem.h,mem.c กลับไปใน free(..) แทน
  *    - fix ปัญหาสำคัญใช้ memset(..) ผิด แก้ให้ถูกแล้ว (สลับ 2 parameter สุดท้าย)
  *
+ * Version 3.0.4 : @19/10/66
+ *    - เพิ่ม MCU_DATA, LCD_DATA ซึ่ง alias ไปยัง BEENEXT_DATA
+ *    - เพิ่ม MCU, LCD  ซึ่ง alias ไปยัง BeeNeXT
  */
 
 #ifndef __BEENEXT_H__
@@ -25,7 +28,7 @@
 /** Minor version number (x.X.x) */
 #define BEENEXT_VERSION_MINOR   0
 /** Patch version number (x.x.X) */
-#define BEENEXT_VERSION_PATCH   2
+#define BEENEXT_VERSION_PATCH   4
 
 #define BEENEXT_VERSION_TEXT    (String(BEENEXT_VERSION_MAJOR)+"."+String(BEENEXT_VERSION_MINOR)+"."+String(BEENEXT_VERSION_PATCH))
 
@@ -76,6 +79,12 @@ extern "C" {
 }
 #endif
 /******************************************************/
+
+
+#define MCU_DATA      BEENEXT_DATA 
+#define LCD_DATA      BEENEXT_DATA
+#define LCD           BeeNeXT
+#define MCU           BeeNeXT
 
 #define BEENEXT_CONNECTION_TIMEOUT      3000
 
