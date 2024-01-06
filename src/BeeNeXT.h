@@ -18,6 +18,10 @@
  * Version 3.0.4 : @19/10/66
  *    - เพิ่ม MCU_DATA, LCD_DATA ซึ่ง alias ไปยัง BEENEXT_DATA
  *    - เพิ่ม MCU, LCD  ซึ่ง alias ไปยัง BeeNeXT
+ * 
+ * Version 3.0.5 : @06/01/67
+ *    - สนับสนุน ESP32S2, ESP32C3 ได้ด้วย
+ * 
  */
 
 #ifndef __BEENEXT_H__
@@ -28,7 +32,7 @@
 /** Minor version number (x.X.x) */
 #define BEENEXT_VERSION_MINOR   0
 /** Patch version number (x.x.X) */
-#define BEENEXT_VERSION_PATCH   4
+#define BEENEXT_VERSION_PATCH   5
 
 #define BEENEXT_VERSION_TEXT    (String(BEENEXT_VERSION_MAJOR)+"."+String(BEENEXT_VERSION_MINOR)+"."+String(BEENEXT_VERSION_PATCH))
 
@@ -119,7 +123,11 @@ public:
         this->begin(&Serial);
       #endif
     #elif defined(ESP32)
-      #if defined(BEENEXT_1_28) || defined(BEENEXT_2_4) || defined(BEENEXT_2_4C) || defined(BEENEXT_2_8) || defined(BEENEXT_2_8C) || defined(BEENEXT_3_2) || defined(BEENEXT_3_2C) || defined(BEENEXT_4_3) || defined(BEENEXT_4_3C) || defined(BEENEXT_4_3IPS) || defined(BEENEXT_5_0IPS) || defined(BEENEXT_7_0IPS)
+      #if CONFIG_IDF_TARGET_ESP32S2
+        Serial1.begin(9600, SERIAL_8N1, 18,17);
+      #elif CONFIG_IDF_TARGET_ESP32C3
+        Serial1.begin(9600, SERIAL_8N1, 18,19);
+      #elif defined(BEENEXT_1_28) || defined(BEENEXT_2_4) || defined(BEENEXT_2_4C) || defined(BEENEXT_2_8) || defined(BEENEXT_2_8C) || defined(BEENEXT_3_2) || defined(BEENEXT_3_2C) || defined(BEENEXT_4_3) || defined(BEENEXT_4_3C) || defined(BEENEXT_4_3IPS) || defined(BEENEXT_5_0IPS) || defined(BEENEXT_7_0IPS)
         this->begin(&Serial);  // ให้เอา R หลังขา RX ออก และ short
       #else
         Serial2.begin(9600, SERIAL_8N1, 16,17); // Serial2 ของ ESP32 ให้ทำงานบน ขา RX16, TX17

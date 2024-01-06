@@ -17,8 +17,13 @@ void BeeNeXT_Class::begin(HardwareSerial *hw_serial){
   this->end();
   Serial.println("[BeeNeXT] on HardwareSerial");
 #if defined(ESP32)
-  if( hw_serial == &Serial || hw_serial == &Serial2)
-    Serial.printf("[BeeNeXT] ESP32's %s\n", (hw_serial == &Serial)? "Serial" : "Serial2");
+  #if CONFIG_IDF_TARGET_ESP32S2 || CONFIG_IDF_TARGET_ESP32C3
+    if( hw_serial == &Serial || hw_serial == &Serial1)
+      Serial.printf("[BeeNeXT] ESP32's %s\n", (hw_serial == &Serial)? "Serial" : "Serial1");
+  #else
+    if( hw_serial == &Serial || hw_serial == &Serial2)
+      Serial.printf("[BeeNeXT] ESP32's %s\n", (hw_serial == &Serial)? "Serial" : "Serial2");
+  #endif
 #endif
   _hw_serial = hw_serial;  // ไม่มีการ serial begin() มาก่อนเอาเอง
   _hw_serial->setTimeout(50);
