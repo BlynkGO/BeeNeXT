@@ -3,7 +3,13 @@
 **ไลบรารี่ ลิขสิทธิ์ สำหรับ ผู้ใช้ จอสัมผัส BeeNeXT เท่านั้น**  
 ให้ MCU ต่างๆ เช่น Arduino UNO, Arduino MEGA, Arduino Nano, ESP8266, ESP32, STM32 ฯลฯ  
 เชื่อมต่อกับ จอสัมผัส BeeNeXT
-  
+
+Version 3.0.5 : @06/01/67  
+- Support ESP32S2, ESP32C3 on Serial1  
+   - ESP32S2        : on Serial1 18,17
+   - ESP32C3        : on Serial1 18,19
+   - ESP32, ESP32S3 : on Serial2 16,17
+    
 Version 3.0.4 : @19/10/66  
 - เพิ่ม MCU_DATA, LCD_DATA ซึ่ง alias ไปยัง BEENEXT_DATA
 - เพิ่ม MCU, LCD  ซึ่ง alias ไปยัง BeeNeXT
