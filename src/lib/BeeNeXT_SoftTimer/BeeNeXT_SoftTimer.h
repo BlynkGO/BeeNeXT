@@ -8,6 +8,8 @@
 #include <Arduino.h>
 #include "linklist.h"
 
+#define CNT_INFINITY    -1
+
 enum { SWTIMER_TYPE_INTERVAL, SWTIMER_TYPE_DELAY };
 typedef uint8_t swtimer_type_t;
 typedef void(*swtimer_cb_t)(void);
@@ -18,8 +20,11 @@ typedef struct _swtimer {
   swtimer_type_t  type;
   unsigned long   timeout;
   unsigned long   timer;
+  int16_t         max_cnt;
   swtimer_cb_t    fn_cb;
   swtimer_param_cb_t fn_param_cb;
+  swtimer_cb_t    fn_ready_cb;
+  swtimer_param_cb_t fn_ready_param_cb;
   void*           param;
 } swtimer_t;
 
@@ -31,6 +36,12 @@ class SoftTimer {
 
     void setInterval(unsigned long period_ms, swtimer_cb_t fn, bool start_first=false);
     void setInterval(unsigned long period_ms, swtimer_param_cb_t fn, void* param, bool start_first=false);
+
+    void setInterval(unsigned long period_ms, int16_t max_cnt, swtimer_cb_t fn, bool start_first=false);
+    void setInterval(unsigned long period_ms, int16_t max_cnt, swtimer_param_cb_t fn, void* param, bool start_first=false);
+
+    void ready_cb(swtimer_cb_t fn_ready);
+    void ready_cb(swtimer_param_cb_t fn_ready_param);
 
     void pause();     // สำหรับ timer ที่ setInterval แล้วต้องการให้หยุดทำงานชั่วคราว
     void replay();    // สำหรับ timer ที่ setInterval หลังมีการ pause() ต้องการให้กลับมาทำงานต่อ
@@ -51,6 +62,9 @@ class SoftTimer {
     static ll_t       swtimer_ll;
     static uint16_t   add_swtimer(swtimer_type_t type, unsigned long timeout, swtimer_cb_t fn_cb);
     static uint16_t   add_swtimer(swtimer_type_t type, unsigned long timeout, swtimer_param_cb_t fn_cb, void* param);
+    static uint16_t   add_swtimer(swtimer_type_t type, unsigned long timeout, int16_t max_cnt, swtimer_cb_t fn_cb);
+    static uint16_t   add_swtimer(swtimer_type_t type, unsigned long timeout, int16_t max_cnt, swtimer_param_cb_t fn_cb, void* param);
+
     static swtimer_t* find_swtimer(uint16_t id);
     static bool       del_swtimer(uint16_t id);
     static uint32_t   count_swtimer();

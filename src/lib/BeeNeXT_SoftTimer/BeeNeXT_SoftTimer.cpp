@@ -38,6 +38,72 @@ void SoftTimer::setInterval(unsigned long period_ms, swtimer_param_cb_t fn, void
   }
 }
 
+void SoftTimer::setInterval(unsigned long period_ms, int16_t max_cnt, swtimer_cb_t fn, bool start_first){
+  if(!SoftTimer::_ll_inited) this->init();
+  this->del();
+  this->_swtimer_id = SoftTimer::add_swtimer(SWTIMER_TYPE_INTERVAL, period_ms, max_cnt, fn);
+  if(start_first){
+    if(fn) fn();
+    swtimer_t* node = SoftTimer::find_swtimer(this->_swtimer_id);
+    if(node !=NULL){
+      if(node->type == SWTIMER_TYPE_INTERVAL && node->max_cnt > 0) {
+        node->max_cnt--;
+        if(node->max_cnt == 0) {
+          if(node->fn_ready_cb !=NULL){
+            node->fn_ready_cb();
+          }else
+          if(node->fn_ready_param_cb !=NULL){
+            node->fn_ready_param_cb(node->param);
+          }
+          SoftTimer::del_swtimer(node->id);
+        }
+      }
+    }
+  }
+}
+
+void SoftTimer::setInterval(unsigned long period_ms, int16_t max_cnt, swtimer_param_cb_t fn, void* param, bool start_first){
+  if(!SoftTimer::_ll_inited) this->init();
+  this->del();
+  this->_swtimer_id = SoftTimer::add_swtimer(SWTIMER_TYPE_INTERVAL, period_ms, fn, param);
+  if(start_first){
+    if(fn) fn(param);
+    swtimer_t* node = SoftTimer::find_swtimer(this->_swtimer_id);
+    if(node !=NULL){
+      if(node->type == SWTIMER_TYPE_INTERVAL && node->max_cnt > 0) {
+        node->max_cnt--;
+        if(node->max_cnt == 0) {
+          if(node->fn_ready_cb !=NULL){
+            node->fn_ready_cb();
+          }else
+          if(node->fn_ready_param_cb !=NULL){
+            node->fn_ready_param_cb(node->param);
+          }
+          SoftTimer::del_swtimer(node->id);
+        }
+      }
+    }
+  }
+}
+
+void SoftTimer::ready_cb(swtimer_cb_t fn_ready){
+  if(this->_swtimer_id == 0) return;
+  swtimer_t* node = SoftTimer::find_swtimer(this->_swtimer_id);
+  if(node){
+    node->fn_ready_cb = fn_ready;
+    node->fn_ready_param_cb = NULL;
+  }
+}
+
+void SoftTimer::ready_cb(swtimer_param_cb_t fn_ready_param){
+  if(this->_swtimer_id == 0) return;
+  swtimer_t* node = SoftTimer::find_swtimer(this->_swtimer_id);
+  if(node){
+    node->fn_ready_cb = NULL;
+    node->fn_ready_param_cb = fn_ready_param;
+  }
+}
+
 void SoftTimer::pause(){
   if(!SoftTimer::_ll_inited) this->init();
   swtimer_t* _cur_node = SoftTimer::find_swtimer(this->_swtimer_id);
@@ -84,6 +150,15 @@ void SoftTimer::del(){
  ******************************************************/
 uint16_t SoftTimer::add_swtimer(swtimer_type_t type, unsigned long timeout, swtimer_cb_t fn_cb)
 {
+  return SoftTimer::add_swtimer(type, timeout, -1, fn_cb);
+}
+
+uint16_t SoftTimer::add_swtimer(swtimer_type_t type, unsigned long timeout, swtimer_param_cb_t fn_param_cb, void* param)
+{
+  return SoftTimer::add_swtimer(type, timeout, -1, fn_param_cb, param);
+}
+
+uint16_t SoftTimer::add_swtimer(swtimer_type_t type, unsigned long timeout, int16_t max_cnt, swtimer_cb_t fn_cb){
   swtimer_t* new_node;
   if(ll_is_empty(&swtimer_ll)){
     new_node = (swtimer_t*)  ll_ins_head(&swtimer_ll);
@@ -101,8 +176,11 @@ uint16_t SoftTimer::add_swtimer(swtimer_type_t type, unsigned long timeout, swti
     new_node->pause   = false;
     new_node->timeout = timeout;
     new_node->timer   = millis() + new_node->timeout ;
+    new_node->max_cnt = max_cnt;
     new_node->fn_cb   = fn_cb;
     new_node->fn_param_cb = NULL;
+    new_node->fn_ready_cb = NULL;
+    new_node->fn_ready_param_cb = NULL;
     new_node->param   = NULL;
     return new_node->id;
   }
@@ -110,8 +188,7 @@ uint16_t SoftTimer::add_swtimer(swtimer_type_t type, unsigned long timeout, swti
   return 0;
 }
 
-uint16_t SoftTimer::add_swtimer(swtimer_type_t type, unsigned long timeout, swtimer_param_cb_t fn_param_cb, void* param)
-{
+uint16_t SoftTimer::add_swtimer(swtimer_type_t type, unsigned long timeout, int16_t max_cnt, swtimer_param_cb_t fn_param_cb, void* param){
   swtimer_t* new_node;
   if(ll_is_empty(&swtimer_ll)){
     new_node = (swtimer_t*)  ll_ins_head(&swtimer_ll);
@@ -129,14 +206,18 @@ uint16_t SoftTimer::add_swtimer(swtimer_type_t type, unsigned long timeout, swti
     new_node->pause   = false;
     new_node->timeout = timeout;
     new_node->timer   = millis() + new_node->timeout ;
+    new_node->max_cnt = -1;
     new_node->fn_cb   = NULL;
     new_node->fn_param_cb = fn_param_cb;
+    new_node->fn_ready_cb = NULL;
+    new_node->fn_ready_param_cb = NULL;
     new_node->param   = param;
     return new_node->id;
   }
   
   return 0;
 }
+
 swtimer_t* SoftTimer::find_swtimer(uint16_t id){
   swtimer_t* node       = (swtimer_t*)  ll_get_head((const ll_t *)&swtimer_ll);
   swtimer_t* node_next  = NULL;
@@ -190,13 +271,24 @@ void SoftTimer::run(){
       node->timer = millis() + node->timeout;
 
       if( (node->type == SWTIMER_TYPE_DELAY ) || 
-          (node->type == SWTIMER_TYPE_INTERVAL && !node->pause ) )
+          (node->type == SWTIMER_TYPE_INTERVAL && !node->pause && (node->max_cnt > 0 || node->max_cnt == CNT_INFINITY)) )
       {
         if( node->fn_cb)            node->fn_cb();
         else if( node->fn_param_cb) node->fn_param_cb(node->param);
+
+        if(node->type == SWTIMER_TYPE_INTERVAL && node->max_cnt > 0 ) {
+          node->max_cnt--;
+        }
       }
       
-      if (node->type == SWTIMER_TYPE_DELAY) {
+      if ((node->type == SWTIMER_TYPE_DELAY) ||
+          (node->type == SWTIMER_TYPE_INTERVAL && node->max_cnt==0)) {
+        if(node->fn_ready_cb !=NULL){
+          node->fn_ready_cb();
+        }else
+        if(node->fn_ready_param_cb !=NULL){
+          node->fn_ready_param_cb(node->param);
+        }
         del_swtimer(node->id);
       }
     }
