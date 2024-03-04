@@ -2,8 +2,15 @@
 
 **ไลบรารี่ ลิขสิทธิ์ สำหรับ ผู้ใช้ จอสัมผัส BeeNeXT เท่านั้น**  
 ให้ MCU ต่างๆ เช่น Arduino UNO, Arduino MEGA, Arduino Nano, ESP8266, ESP32, STM32 ฯลฯ  
-เชื่อมต่อกับ จอสัมผัส BeeNeXT
-
+เชื่อมต่อกับ จอสัมผัส BeeNeXT  
+  
+Version 3.1.0 : @04/03/67  
+- SoftTimer เพิ่มให้ setInterval สามารถตั้งจำนวนรอบทำงานได้
+  เมื่อสิ้นสุดให้ไปทำงาน ready_cb ที่กำหนด  
+  
+Version 3.0.6 : @04/03/67  
+- fix warning compiling บน AVR  
+  
 Version 3.0.5 : @06/01/67  
 - Support ESP32S2, ESP32C3 on Serial1  
    - ESP32S2        : on Serial1 18,17
