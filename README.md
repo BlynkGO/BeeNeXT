@@ -4,6 +4,9 @@
 ให้ MCU ต่างๆ เช่น Arduino UNO, Arduino MEGA, Arduino Nano, ESP8266, ESP32, STM32 ฯลฯ  
 เชื่อมต่อกับ จอสัมผัส BeeNeXT  
   
+Version 3.1.1 : @05/03/67  
+- เพิ่ม free(memory) ให้คืน mem หลัง del()    
+  
 Version 3.1.0 : @04/03/67  
 - SoftTimer เพิ่มให้ setInterval สามารถตั้งจำนวนรอบทำงานได้
   เมื่อสิ้นสุดให้ไปทำงาน ready_cb ที่กำหนด  
