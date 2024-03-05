@@ -8,7 +8,7 @@ void setup() {
   static SoftTimer timer;
   timer.setInterval(5000, [](){                   // ตั้งเวลาทำงานทุกๆ 5 วินาที
     Serial.println("[Start] read data 20 rounds");
-    sum = 0; analog_min =0; analog_max = 0;       // reset ค่า
+    sum = 0; analog_min =0xFFFF; analog_max = 0;       // reset ค่า
     static SoftTimer t;
     t.setInterval(10,20,[](){                     // ตั้งเวลาอ่านทุกๆ 10ms ไป 20 รอบ
       int analog_val = random(100);               // อ่านจริง ใช้ analogRead(A0) เป็นต้น
