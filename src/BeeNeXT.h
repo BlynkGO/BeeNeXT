@@ -30,6 +30,9 @@
  * Version 3.1.0 : @04/03/67
  *    - ปรับปรุง SoftTimer ให้ แบบ setInterval(..) สามารถกำหนดรอบที่จะทำงานมากสุดกี่รอบได้
  *      โดย สามารถกำหนด ready_cb(..) เพื่อ ไว้ทำงานตอนหลังจากครบรอบทั้งหมดแล้ว
+ * 
+ * Version 3.1.1 : @05/03/67
+ *    - fix เวลา ล้าง timer ออกไป free mem ที่จอง ไม่ให้เกิด mem รั่ว
  */
 
 #ifndef __BEENEXT_H__
@@ -38,9 +41,9 @@
 /** Major version number (X.x.x) */
 #define BEENEXT_VERSION_MAJOR   3
 /** Minor version number (x.X.x) */
-#define BEENEXT_VERSION_MINOR   0
+#define BEENEXT_VERSION_MINOR   1
 /** Patch version number (x.x.X) */
-#define BEENEXT_VERSION_PATCH   5
+#define BEENEXT_VERSION_PATCH   1
 
 #define BEENEXT_VERSION_TEXT    (String(BEENEXT_VERSION_MAJOR)+"."+String(BEENEXT_VERSION_MINOR)+"."+String(BEENEXT_VERSION_PATCH))
 
