@@ -60,6 +60,7 @@ delay	KEYWORD2
 del	KEYWORD2
 pause	KEYWORD2
 replay	KEYWORD2
+resume	KEYWORD2
 run	KEYWORD2
 
 

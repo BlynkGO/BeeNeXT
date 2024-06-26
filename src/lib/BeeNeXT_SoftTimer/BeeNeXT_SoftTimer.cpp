@@ -112,13 +112,15 @@ void SoftTimer::pause(){
   }
 }
 
-void SoftTimer::replay(){
+// ฟังก์ชันใหม่ resume
+void SoftTimer::resume(){
   if(!SoftTimer::_ll_inited) this->init();
   swtimer_t* _cur_node = SoftTimer::find_swtimer(this->_swtimer_id);
   if( _cur_node->type == SWTIMER_TYPE_INTERVAL ){
     _cur_node->pause = false;
   }
 }
+
 
 void SoftTimer::delay(unsigned long delay_ms, swtimer_cb_t fn, bool start_first){
   if(!SoftTimer::_ll_inited) this->init();

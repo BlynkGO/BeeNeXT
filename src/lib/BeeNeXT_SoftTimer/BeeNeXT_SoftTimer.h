@@ -43,8 +43,11 @@ class SoftTimer {
     void ready_cb(swtimer_cb_t fn_ready);
     void ready_cb(swtimer_param_cb_t fn_ready_param);
 
-    void pause();     // สำหรับ timer ที่ setInterval แล้วต้องการให้หยุดทำงานชั่วคราว
-    void replay();    // สำหรับ timer ที่ setInterval หลังมีการ pause() ต้องการให้กลับมาทำงานต่อ
+    void pause();       // สำหรับ timer ที่ setInterval แล้วต้องการให้หยุดทำงานชั่วคราว
+    void resume();      // สำหรับ timer ที่ setInterval หลังมีการ pause() ต้องการให้กลับมาทำงานต่อ
+
+    [[deprecated("The API replay() is deprecated and will be removed soon. Please use the API resume() instead.")]]
+    void replay()       {  this->resume(); }
 
     void delay(unsigned long delay_ms, swtimer_cb_t fn, bool start_first=false);
     void delay(unsigned long delay_ms, swtimer_param_cb_t fn, void* param, bool start_first=false);

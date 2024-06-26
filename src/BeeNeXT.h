@@ -33,6 +33,10 @@
  * 
  * Version 3.1.1 : @05/03/67
  *    - fix เวลา ล้าง timer ออกไป free mem ที่จอง ไม่ให้เกิด mem รั่ว
+ * 
+ * Version 3.1.2 : @26/06/67
+ *    - เปลี่ยน คำสั่ง SoftTimer เมื่อมีการ pause() แล้วให้กลับมาทำงานด้วยคำสั่ง resume()  ไม่ใช่ replay()
+ *
  */
 
 #ifndef __BEENEXT_H__
@@ -43,7 +47,7 @@
 /** Minor version number (x.X.x) */
 #define BEENEXT_VERSION_MINOR   1
 /** Patch version number (x.x.X) */
-#define BEENEXT_VERSION_PATCH   1
+#define BEENEXT_VERSION_PATCH   2
 
 #define BEENEXT_VERSION_TEXT    (String(BEENEXT_VERSION_MAJOR)+"."+String(BEENEXT_VERSION_MINOR)+"."+String(BEENEXT_VERSION_PATCH))
 
