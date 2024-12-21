@@ -4,7 +4,11 @@
 ให้ MCU ต่างๆ เช่น Arduino UNO, Arduino MEGA, Arduino Nano, ESP8266, ESP32, STM32 ฯลฯ  
 เชื่อมต่อกับ จอสัมผัส BeeNeXT  
   
-Version 3.1.2 : @26/06/67
+
+Version 3.1.3 : @21/12/67  
+- ESP32 รองรับ CDC  ( HWCDC, USBCDC )      
+  
+Version 3.1.2 : @26/06/67  
 - เปลี่ยนชื่อคำสั่ง replay() เป็น resume() ที่ตรงความหมาย แทน      
   
 Version 3.1.1 : @05/03/67  

@@ -13,10 +13,42 @@ static SoftTimer timer_delay;
 #endif
 bool BeeNeXT_Class::_beenext_enable = true;
 
-void BeeNeXT_Class::begin(HardwareSerial *hw_serial){
+#if defined(ESP32)
+  #if ARDUINO_USB_CDC_ON_BOOT
+    #if ARDUINO_USB_MODE   // Hardware CDC mode
+
+void BeeNeXT_Class::begin(HWCDC *hw_serial){          // ESP32 HWCDCSerial
+  this->end();
+  Serial.println("[BeeNeXT] on HWCDCSerial");
+  _hw_serial = hw_serial; 
+  _hw_serial->setTimeout(50);
+  _hw_serial->flush();
+
+  #if BEENEXT_USE_HEARTBEAT && BEENEXT_USE_SOFTTIMER
+  this->init_heartbeat();
+  #endif // #if BEENEXT_USE_HEARTBEAT && BEENEXT_USE_SOFTTIMER  
+}
+    #else  // !ARDUINO_USB_MODE -- Native USB Mode
+
+void BeeNeXT_Class::begin(USBCDC *hw_serial) {           // ESP32 USBSerial
+  this->end();
+  Serial.println("[BeeNeXT] on USBSerial");
+  _hw_serial = hw_serial; 
+  _hw_serial->setTimeout(50);
+  _hw_serial->flush();
+
+  #if BEENEXT_USE_HEARTBEAT && BEENEXT_USE_SOFTTIMER
+  this->init_heartbeat();
+  #endif // #if BEENEXT_USE_HEARTBEAT && BEENEXT_USE_SOFTTIMER  
+}
+    #endif // ARDUINO_USB_MODE   // Hardware CDC mode
+
+  #else   // !ARDUINO_USB_CDC_ON_BOOT -- Serial is used from UART0
+
+void BeeNeXT_Class::begin(HardwareSerial *hw_serial){       // ESP32 HardwareSerial
   this->end();
   Serial.println("[BeeNeXT] on HardwareSerial");
-#if defined(ESP32)
+
   #if CONFIG_IDF_TARGET_ESP32S2 || CONFIG_IDF_TARGET_ESP32C3
     if( hw_serial == &Serial || hw_serial == &Serial1)
       Serial.printf("[BeeNeXT] ESP32's %s\n", (hw_serial == &Serial)? "Serial" : "Serial1");
@@ -24,7 +56,22 @@ void BeeNeXT_Class::begin(HardwareSerial *hw_serial){
     if( hw_serial == &Serial || hw_serial == &Serial2)
       Serial.printf("[BeeNeXT] ESP32's %s\n", (hw_serial == &Serial)? "Serial" : "Serial2");
   #endif
-#endif
+
+  _hw_serial = hw_serial;  // ไม่มีการ serial begin() มาก่อนเอาเอง
+  _hw_serial->setTimeout(50);
+  _hw_serial->flush();
+
+  #if BEENEXT_USE_HEARTBEAT && BEENEXT_USE_SOFTTIMER
+  this->init_heartbeat();
+  #endif // #if BEENEXT_USE_HEARTBEAT && BEENEXT_USE_SOFTTIMER  
+}
+  #endif
+  
+#else  // #if defined(ESP32)
+
+void BeeNeXT_Class::begin(HardwareSerial *hw_serial){     // Other MCU HardwareSerial
+  this->end();
+  Serial.println("[BeeNeXT] on HardwareSerial");
   _hw_serial = hw_serial;  // ไม่มีการ serial begin() มาก่อนเอาเอง
   _hw_serial->setTimeout(50);
   _hw_serial->flush();
@@ -34,6 +81,10 @@ void BeeNeXT_Class::begin(HardwareSerial *hw_serial){
 #endif // #if BEENEXT_USE_HEARTBEAT && BEENEXT_USE_SOFTTIMER  
 
 }
+
+#endif // #if defined(ESP32)
+
+
 
 #if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
 void BeeNeXT_Class::begin(SoftwareSerial *sw_serial){

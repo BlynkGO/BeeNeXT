@@ -37,6 +37,9 @@
  * Version 3.1.2 : @26/06/67
  *    - เปลี่ยน คำสั่ง SoftTimer เมื่อมีการ pause() แล้วให้กลับมาทำงานด้วยคำสั่ง resume()  ไม่ใช่ replay()
  *
+ * Version 3.1.3 : @21/12/67
+ *    - ESP32 รองรับ CDC  ( HWCDC, USBCDC )
+ *
  */
 
 #ifndef __BEENEXT_H__
@@ -47,7 +50,7 @@
 /** Minor version number (x.X.x) */
 #define BEENEXT_VERSION_MINOR   1
 /** Patch version number (x.x.X) */
-#define BEENEXT_VERSION_PATCH   2
+#define BEENEXT_VERSION_PATCH   3
 
 #define BEENEXT_VERSION_TEXT    (String(BEENEXT_VERSION_MAJOR)+"."+String(BEENEXT_VERSION_MINOR)+"."+String(BEENEXT_VERSION_PATCH))
 
@@ -74,6 +77,8 @@
 
 #include <Arduino.h>
 #include "beenext_config.h"
+
+#include <HardwareSerial.h>
 
 #if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0) 
 #include "lib/SoftwareSerial/SoftwareSerial.h"
@@ -145,8 +150,16 @@ public:
       #elif defined(BEENEXT_1_28) || defined(BEENEXT_2_4) || defined(BEENEXT_2_4C) || defined(BEENEXT_2_8) || defined(BEENEXT_2_8C) || defined(BEENEXT_3_2) || defined(BEENEXT_3_2C) || defined(BEENEXT_4_3) || defined(BEENEXT_4_3C) || defined(BEENEXT_4_3IPS) || defined(BEENEXT_5_0IPS) || defined(BEENEXT_7_0IPS)
         this->begin(&Serial);  // ให้เอา R หลังขา RX ออก และ short
       #else
-        Serial2.begin(9600, SERIAL_8N1, 16,17); // Serial2 ของ ESP32 ให้ทำงานบน ขา RX16, TX17
-        this->begin(&Serial2);
+        #if ARDUINO_USB_CDC_ON_BOOT
+          #if ARDUINO_USB_MODE   // Hardware CDC mode
+          //...
+          #else  // !ARDUINO_USB_MODE -- Native USB Mode
+          //...
+          #endif
+        #else   // !ARDUINO_USB_CDC_ON_BOOT -- Serial is used from UART0
+          Serial2.begin(9600, SERIAL_8N1, 16,17); // Serial2 ของ ESP32 ให้ทำงานบน ขา RX16, TX17
+          this->begin(&Serial2);
+        #endif
       #endif
     #elif defined(__STM32F1__)
       Serial2.begin(9600);  // Serial2 ของ Arduino MEGA ขา PA3, PA2
@@ -154,7 +167,17 @@ public:
     #endif
   }
 
+#if ARDUINO_USB_CDC_ON_BOOT
+#if ARDUINO_USB_MODE   // Hardware CDC mode
+  void begin(HWCDC *hw_serial);
+#else  // !ARDUINO_USB_MODE -- Native USB Mode
+  void begin(USBCDC *hw_serial);
+#endif
+#else   // !ARDUINO_USB_CDC_ON_BOOT -- Serial is used from UART0
   void begin(HardwareSerial *hw_serial);
+#endif
+
+
 #if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
   SoftwareSerial * _sw_serial=NULL;
   void begin(SoftwareSerial *sw_serial);
@@ -267,7 +290,17 @@ public:
   inline void protocol_println()           { uint8_t data[2] = {'\r','\n'}; this->protocol_write(data, 2); }
 
 private:
+
+#if ARDUINO_USB_CDC_ON_BOOT
+  #if ARDUINO_USB_MODE   // Hardware CDC mode
+  HWCDC * _hw_serial = NULL;
+  #else  // !ARDUINO_USB_MODE -- Native USB Mode
+  USBCDC * _hw_serial = NULL;
+  #endif
+#else   // !ARDUINO_USB_CDC_ON_BOOT -- Serial is used from UART0
   HardwareSerial * _hw_serial=NULL;
+#endif
+
 #if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
 
   bool  _is_swserial_alloced=false;
