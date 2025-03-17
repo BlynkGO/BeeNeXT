@@ -40,6 +40,8 @@
  * Version 3.1.3 : @21/12/67
  *    - ESP32 รองรับ CDC  ( HWCDC, USBCDC )
  *
+ * Version 3.1.4 : @17/03/68
+ *    - ESP8266 / ESP32 เพิ่ม ::delay(1) ขณะ run ป้องกัน WDT ให้สามารถกระจายไปยัง task อื่นทำงานได้
  */
 
 #ifndef __BEENEXT_H__

@@ -268,6 +268,9 @@ void SoftTimer::run(){
   swtimer_t* node       = (swtimer_t*)  ll_get_head((const ll_t *)&swtimer_ll);
   swtimer_t* node_next  = NULL;
   while(node != NULL) {
+#if defined(ESP8266) || defined(ESP32)
+    ::delay(1);
+#endif
     node_next = (swtimer_t*)ll_get_next(&swtimer_ll, node);
 
     if ( millis() >= node->timer ) {
