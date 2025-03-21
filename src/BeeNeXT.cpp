@@ -49,7 +49,7 @@ void BeeNeXT_Class::begin(HardwareSerial *hw_serial){       // ESP32 HardwareSer
   this->end();
   Serial.println("[BeeNeXT] on HardwareSerial");
 
-  #if CONFIG_IDF_TARGET_ESP32S2 || CONFIG_IDF_TARGET_ESP32C3
+  #if CONFIG_IDF_TARGET_ESP32S2 || CONFIG_IDF_TARGET_ESP32C3 || CONFIG_IDF_TARGET_ESP32C6
     if( hw_serial == &Serial || hw_serial == &Serial1)
       Serial.printf("[BeeNeXT] ESP32's %s\n", (hw_serial == &Serial)? "Serial" : "Serial1");
   #else

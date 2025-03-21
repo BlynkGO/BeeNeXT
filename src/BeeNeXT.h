@@ -42,6 +42,9 @@
  *
  * Version 3.1.4 : @17/03/68
  *    - ESP8266 / ESP32 เพิ่ม ::delay(1) ขณะ run ป้องกัน WDT ให้สามารถกระจายไปยัง task อื่นทำงานได้
+ *
+ * Version 3.1.5  @21/03/68
+ *    - รองรับ ESP32P4, ESP32C6 ด้วย
  */
 
 #ifndef __BEENEXT_H__
@@ -52,7 +55,7 @@
 /** Minor version number (x.X.x) */
 #define BEENEXT_VERSION_MINOR   1
 /** Patch version number (x.x.X) */
-#define BEENEXT_VERSION_PATCH   3
+#define BEENEXT_VERSION_PATCH   5
 
 #define BEENEXT_VERSION_TEXT    (String(BEENEXT_VERSION_MAJOR)+"."+String(BEENEXT_VERSION_MINOR)+"."+String(BEENEXT_VERSION_PATCH))
 
@@ -149,6 +152,8 @@ public:
         Serial1.begin(9600, SERIAL_8N1, 18,17);
       #elif CONFIG_IDF_TARGET_ESP32C3
         Serial1.begin(9600, SERIAL_8N1, 18,19);
+      #elif CONFIG_IDF_TARGET_ESP32C6
+
       #elif defined(BEENEXT_1_28) || defined(BEENEXT_2_4) || defined(BEENEXT_2_4C) || defined(BEENEXT_2_8) || defined(BEENEXT_2_8C) || defined(BEENEXT_3_2) || defined(BEENEXT_3_2C) || defined(BEENEXT_4_3) || defined(BEENEXT_4_3C) || defined(BEENEXT_4_3IPS) || defined(BEENEXT_5_0IPS) || defined(BEENEXT_7_0IPS)
         this->begin(&Serial);  // ให้เอา R หลังขา RX ออก และ short
       #else
