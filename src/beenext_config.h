@@ -8,7 +8,7 @@
 #define BEENEXT_USE_BEEMQTT             0
 #define BEENEXT_USE_BEEUART_CRC16       0
 
-#define BEENEXT_USE_SOFTWARESERIAL      1
+#define BEENEXT_USE_SOFTWARESERIAL      1   // หากใช้ต้องเปิด BEENEXT_USE_BEEUART_CRC16 เป็น 1 ด้วย
 #define BEENEXT_USE_SOFTTIMER           1
 #define BEENEXT_USE_HEARTBEAT           1   // ทำงานได้ต้องเปิด BEENEXT_USE_SOFTTIMER เป็น 1 ด้วย
 #define BEENEXT_USE_DEBUG               0
