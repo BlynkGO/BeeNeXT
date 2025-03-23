@@ -7,7 +7,7 @@ void setup() {
   Serial.begin(115200); Serial.println();
   BlynkGO.begin();
 
-  BeeI2C::onData([](String key, String value){
+  BeeI2C.onData([](String key, String value){
     Serial.println(key + " ---> " + value);
     if(key.startsWith("TEMP")){
       float temp = value.toFloat();
@@ -23,7 +23,7 @@ void setup() {
   led.clickable(true);
   led.onClicked([](GWIDGET){
     led.toggle();
-    BeeI2C::print("LED", led.isON());  // ส่ง key "LED" ระบุสถานะ ไปยัง MCU หน้าบ้าน
+    BeeI2C.print("LED", led.isON());  // ส่ง key "LED" ระบุสถานะ ไปยัง MCU หน้าบ้าน
   });
 
 }

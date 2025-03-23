@@ -20,19 +20,19 @@ namespace McuI2C_Master {
 }
 
 #if defined(ESP32)
-namespace BeeI2C {
+namespace BeeI2C_Slave {
   void init(uint8_t sda, uint8_t scl, void(*fn)(String key, String value));
-  inline void onData(uint8_t sda, uint8_t scl, void(*fn)(String key, String value))       { BeeI2C::init(sda, scl, fn); }
+  inline void onData(uint8_t sda, uint8_t scl, void(*fn)(String key, String value))       { BeeI2C_Slave::init(sda, scl, fn); }
 #if defined(BEENEXT_2_4) || defined(BEENEXT_2_4C) || defined(BEENEXT_3_2) || defined(BEENEXT_3_2C) || defined(BEENEXT_3_5)  || defined(BEENEXT_3_5C) || defined(BEENEXT_7_0MAX)
   inline void init(void(*fn)(String key, String value)){
-    BeeI2C::init(21, 22, fn);
+    BeeI2C_Slave::init(21, 22, fn);
   }
-  inline void onData(void(*fn)(String key, String value))                                 { BeeI2C::init(fn); }
+  inline void onData(void(*fn)(String key, String value))                                 { BeeI2C_Slave::init(fn); }
 #elif defined(BEENEXT_4_3) || defined(BEENEXT_4_3C) || defined(BEENEXT_4_3IPS) || defined(BEENEXT_5_0IPS)  || defined(BEENEXT_7_0IPS)
   inline void init(void(*fn)(String key, String value)){
-    BeeI2C::init(17, 18, fn);
+    BeeI2C_Slave::init(17, 18, fn);
   }
-  inline void onData(void(*fn)(String key, String value))                                 { BeeI2C::init(fn); }
+  inline void onData(void(*fn)(String key, String value))                                 { BeeI2C_Slave::init(fn); }
 #endif
 
   void print(String key, String value);
