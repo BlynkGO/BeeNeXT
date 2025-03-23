@@ -5,7 +5,9 @@
 เชื่อมต่อกับ จอสัมผัส BeeNeXT  
   
 Version 3.1.6 : @23/03/68  
-- รองรับ BEENEXT_USE_BEEUART_CRC16, BEENEXT_USE_BEEI2C (default) แต่แรก  
+- รองรับ BEENEXT_USE_BEEI2C (default) แต่แรก  
+- รองรับ BEENEXT_USE_BEEMQTT เชื่อมต่อแบบไร้สาย 
+- รองรับ BEENEXT_USE_BEEUART_CRC16   
 - SoftTimer มี onFinished แทน ready_cb  
   
 Version 3.1.5 : @21/03/68  
