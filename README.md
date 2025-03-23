@@ -4,6 +4,10 @@
 ให้ MCU ต่างๆ เช่น Arduino UNO, Arduino MEGA, Arduino Nano, ESP8266, ESP32, STM32 ฯลฯ  
 เชื่อมต่อกับ จอสัมผัส BeeNeXT  
   
+Version 3.1.6 : @23/03/68  
+- รองรับ BEENEXT_USE_BEEUART_CRC16, BEENEXT_USE_BEEI2C (default) แต่แรก  
+- SoftTimer มี onFinished แทน ready_cb  
+  
 Version 3.1.5 : @21/03/68  
 - รองรับ ESP32P4, ESP32C6 ด้วย  
 
