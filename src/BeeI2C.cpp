@@ -82,12 +82,12 @@ typedef struct {
 std::vector<beei2c_data_t> beei2c_vector;
 // void(*_func_i2c_recv_cb)(String key, String value);
 
-void BeeI2C_Slave::init(uint8_t sda, uint8_t scl,void(*fn)(String key, String value)){
+void BeeI2C::init(uint8_t sda, uint8_t scl,void(*fn)(String key, String value)){
   _func_i2c_recv_cb = fn;
   if(WIRE_SLAVE_BUS.begin(BEEI2C_ADDR, sda, scl, 100000)){
-    Serial.println("[BeeI2C_Slave] init : OK");
+    Serial.println("[BeeI2C] init : OK");
   }else{
-    Serial.println("[BeeI2C_Slave] init : Failed");    
+    Serial.println("[BeeI2C] init : Failed");    
   }
   WIRE_SLAVE_BUS.onRequest([](){
     if(beei2c_vector.size()){
@@ -112,23 +112,23 @@ void BeeI2C_Slave::init(uint8_t sda, uint8_t scl,void(*fn)(String key, String va
 
 
 
-void BeeI2C_Slave::print(String key, String value){
+void BeeI2C::print(String key, String value){
   beei2c_data_t beei2c_data;
     beei2c_data.key   = key;
     beei2c_data.value = value;
   beei2c_vector.push_back(beei2c_data);
 }
 
-void BeeI2C_Slave::print(String key, int value){
-  BeeI2C_Slave::print(key, String(value));
+void BeeI2C::print(String key, int value){
+  BeeI2C::print(key, String(value));
 }
 
-void BeeI2C_Slave::print(String key, float value, int decimalPlaces){
-  BeeI2C_Slave::print(key, String(value, decimalPlaces));
+void BeeI2C::print(String key, float value, int decimalPlaces){
+  BeeI2C::print(key, String(value, decimalPlaces));
 }
 
-void BeeI2C_Slave::print(String key, double value, int decimalPlaces){
-  BeeI2C_Slave::print(key, String(value, decimalPlaces));
+void BeeI2C::print(String key, double value, int decimalPlaces){
+  BeeI2C::print(key, String(value, decimalPlaces));
 }
 
 #endif // #if defined(ESP32)

@@ -327,12 +327,12 @@ public:
   #if defined(ESP32)
   #if defined(BEENEXT_2_4) || defined(BEENEXT_2_4C) || defined(BEENEXT_3_2) || defined(BEENEXT_3_2C) || defined(BEENEXT_3_5)  || defined(BEENEXT_3_5C) || defined(BEENEXT_4_3) || defined(BEENEXT_4_3C) || defined(BEENEXT_4_3IPS) || defined(BEENEXT_5_0IPS)  || defined(BEENEXT_7_0IPS) || defined(BEENEXT_7_0MAX)
   inline void onData(void(*fn)(String key, String value)) {
-    BeeI2C_Slave::init(fn);
+    BeeI2C::init(fn);
   }
   #endif // #if defined(BEENEXT_3_2) || defined(BEENEXT_3_2C) || defined(BEENEXT_3_5)  || defined(BEENEXT_3_5C)
 
   inline void onData(uint8_t sda, uint8_t scl, void(*fn)(String key, String value)){
-    BeeI2C_Slave::init(sda, scl, fn);
+    BeeI2C::init(sda, scl, fn);
   }
   #endif// ESP32
 
@@ -342,7 +342,7 @@ public:
     }
     #if defined(ESP32)
     else{
-      BeeI2C_Slave::print(key, value);
+      BeeI2C::print(key, value);
     }
     #endif
   }
