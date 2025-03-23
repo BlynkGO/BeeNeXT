@@ -47,8 +47,10 @@
  *    - รองรับ ESP32P4, ESP32C6 ด้วย
  *
  * Version 3.1.6  @23/03/68
- *    - รองรับ BEENEXT_USE_BEEUART_CRC16, BEENEXT_USE_BEEI2C (default) แต่แรก, BEENEXT_USE_BEEMQTT
- *    - SoftTimer มี onFinished แทน ready_cb
+ *    - รองรับ BEENEXT_USE_BEEI2C (default) แต่แรก  
+ *    - รองรับ BEENEXT_USE_BEEMQTT เชื่อมต่อแบบไร้สาย 
+ *    - รองรับ BEENEXT_USE_BEEUART_CRC16   
+ *    - SoftTimer มี onFinished แทน ready_cb  
  *
  */
 
