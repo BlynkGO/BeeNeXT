@@ -7,7 +7,7 @@ void setup() {
   Serial.begin(115200); Serial.println();
   BlynkGO.begin();
 
-  BeeNeXT.begin([](String key, String value){
+  BeeNeXT.onData([](String key, String value){
     Serial.println(key + " ---> " + value);
     if(key.startsWith("TEMP")){
       float temp = value.toFloat();

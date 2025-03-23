@@ -30,11 +30,6 @@ void setup() {
     if(key.startsWith("LED")) {
       bool led_state = value.toInt();
       digitalWrite(LED_PIN, led_state? LED_ON : LED_OFF);
-    }else
-    if(key.startsWith("MY_NUM")) {
-      int num = value.toInt();
-      Serial.print("[MCU] recv : ");
-      Serial.println(num);
     }
   });
 
