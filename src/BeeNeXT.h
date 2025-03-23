@@ -316,13 +316,13 @@ public:
   inline void protocol_write(uint8_t data) { this->protocol_write(&data, 1); }
   inline void protocol_println()           { uint8_t data[2] = {'\r','\n'}; this->protocol_write(data, 2); }
 #elif BEENEXT_USE_BEEI2C   //#if BEENEXT_USE_BEEUART_CRC16
-  inline void init(void(*fn)(String key, String value)) {
+  inline void begin(void(*fn)(String key, String value)) {
     McuI2C_Master::init(fn);
     this->_is_i2c_master = true;
   }
 
   #if defined(ESP32)
-  inline void init(uint8_t sda, uint8_t scl, void(*fn)(String key, String value)) {
+  inline void begin(uint8_t sda, uint8_t scl, void(*fn)(String key, String value)) {
     McuI2C_Master::init(sda, scl, fn);
     this->_is_i2c_master = true;
   }

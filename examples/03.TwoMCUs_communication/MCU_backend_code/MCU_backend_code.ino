@@ -25,7 +25,7 @@ void setup() {
   pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, LED_OFF);
 
-  LCD.init([](String key, String value){
+  LCD.begin([](String key, String value){
     Serial.println(key + " ---> " + value);
     if(key.startsWith("LED")) {
       bool led_state = value.toInt();
