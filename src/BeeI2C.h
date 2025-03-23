@@ -23,7 +23,7 @@ namespace McuI2C_Master {
 namespace BeeI2C_Slave {
   void init(uint8_t sda, uint8_t scl, void(*fn)(String key, String value));
 
-#if defined(BEENEXT_2_4) || defined(BEENEXT_2_4C) || defined(BEENEXT_3_2) || defined(BEENEXT_3_2C) || defined(BEENEXT_3_5)  || defined(BEENEXT_3_5C)
+#if defined(BEENEXT_2_4) || defined(BEENEXT_2_4C) || defined(BEENEXT_3_2) || defined(BEENEXT_3_2C) || defined(BEENEXT_3_5)  || defined(BEENEXT_3_5C) || defined(BEENEXT_7_0MAX)
   inline void init(void(*fn)(String key, String value)){
     BeeI2C_Slave::init(21, 22, fn);
   }
