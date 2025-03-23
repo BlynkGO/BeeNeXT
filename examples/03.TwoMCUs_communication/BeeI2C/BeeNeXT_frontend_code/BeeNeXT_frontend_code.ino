@@ -12,7 +12,11 @@ void setup() {
     if(key.startsWith("TEMP")){
       float temp = value.toFloat();
       gauge = temp;
+    }else
+    if(key.startsWith("HUMID")){
+      //....
     }
+    
   });
 
   gauge.color(TFT_BLUE, TFT_RED);

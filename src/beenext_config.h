@@ -4,8 +4,10 @@
 /**********************************************
  * BeeNeXT config
  *********************************************/
+#define BEENEXT_USE_BEEI2C              0
+#define BEENEXT_USE_BEEMQTT             1
 #define BEENEXT_USE_BEEUART_CRC16       0
-#define BEENEXT_USE_BEEI2C              1
+
 #define BEENEXT_USE_SOFTWARESERIAL      1
 #define BEENEXT_USE_SOFTTIMER           1
 #define BEENEXT_USE_HEARTBEAT           1   // ทำงานได้ต้องเปิด BEENEXT_USE_SOFTTIMER เป็น 1 ด้วย

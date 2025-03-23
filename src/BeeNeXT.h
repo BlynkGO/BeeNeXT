@@ -47,7 +47,7 @@
  *    - รองรับ ESP32P4, ESP32C6 ด้วย
  *
  * Version 3.1.6  @23/03/68
- *    - รองรับ BEENEXT_USE_BEEUART_CRC16, BEENEXT_USE_BEEI2C (default) แต่แรก
+ *    - รองรับ BEENEXT_USE_BEEUART_CRC16, BEENEXT_USE_BEEI2C (default) แต่แรก, BEENEXT_USE_BEEMQTT
  *    - SoftTimer มี onFinished แทน ready_cb
  *
  */
@@ -95,6 +95,8 @@
 #endif
 #elif BEENEXT_USE_BEEI2C
 #include "BeeI2C.h"
+#elif BEENEXT_USE_BEEMQTT
+#include "BeeMQTT.h"
 #endif
 
 
@@ -315,7 +317,9 @@ public:
   }
   inline void protocol_write(uint8_t data) { this->protocol_write(&data, 1); }
   inline void protocol_println()           { uint8_t data[2] = {'\r','\n'}; this->protocol_write(data, 2); }
-#elif BEENEXT_USE_BEEI2C   //#if BEENEXT_USE_BEEUART_CRC16
+
+  //------------------------------------------------------------------------- BeeI2C
+  #elif BEENEXT_USE_BEEI2C   //#if BEENEXT_USE_BEEUART_CRC16
   inline void begin(void(*fn)(String key, String value)) {
     McuI2C_Master::init(fn);
     this->_is_i2c_master = true;
@@ -351,19 +355,88 @@ public:
     #endif
   }
 
-  inline void print(String key, float value, int decimalPlaces){
+  inline void print(String key, float value, int decimalPlaces=2){
     this->print(key, String(value, decimalPlaces));
   }
 
-  inline void print(String key, double value, int decimalPlaces){
+  inline void print(String key, double value, int decimalPlaces=2){
     this->print(key, String(value, decimalPlaces));
   }
 
   inline void print(String key, int value){
     this->print(key, String(value));
   }
+      // end of #elif BEENEXT_USE_BEEI2C
+  //------------------------------------------------------------------------- BeeMQTT
+  #elif BEENEXT_USE_BEEMQTT
+  #if defined(ESP8266) || defined(ESP32)
+    inline void client_id(String client_id) {
+      BeeMQTT::client_id(client_id);
+    }
 
-  #endif //if BEENEXT_USE_BEEI2C
+    inline void begin(String ssid, String pass, String mqtt_host, uint16_t mqtt_port, String mqtt_user, String mqtt_pass, void(*fn)(String topic, String message))
+    {
+      BeeMQTT::init(ssid, pass, mqtt_host, mqtt_port, mqtt_user, mqtt_pass, fn);
+    }
+
+    inline void begin(String ssid, String pass, String mqtt_host, uint16_t mqtt_port, void(*fn)(String topic, String message))
+    {
+      BeeMQTT::init(ssid, pass, mqtt_host, mqtt_port, fn);
+    }
+
+    inline void begin(String mqtt_host, uint16_t mqtt_port, String mqtt_user, String mqtt_pass, void(*fn)(String topic, String message))
+    {
+      BeeMQTT::init(mqtt_host, mqtt_port, mqtt_user, mqtt_pass, fn);
+    }
+
+    inline void begin(String mqtt_host, uint16_t mqtt_port, void(*fn)(String topic, String message))
+    {
+      BeeMQTT::init(mqtt_host, mqtt_port, "", "", fn);
+    }
+
+    inline void begin(String mqtt_host, void(*fn)(String topic, String message))
+    {
+      BeeMQTT::init(mqtt_host, 1883, "", "", fn);
+    }
+
+    
+    inline void subscribe(String topic, uint8_t qos=0){
+      BeeMQTT::subscribe(topic, qos);
+    }
+
+    inline bool publish(String topic, String message, bool retained=false){
+      return BeeMQTT::publish(topic, message, retained);
+    }
+    inline void publish(String topic, float value, int decimalPlaces=2){
+      this->publish(topic, String(value, decimalPlaces));
+    }
+  
+    inline void publish(String topic, double value, int decimalPlaces=2){
+      this->publish(topic, String(value, decimalPlaces));
+    }
+  
+    inline void publish(String topic, int value){
+      this->publish(topic, String(value));
+    }
+
+    inline void print(String topic, String message, bool retained =false){
+      this->publish(topic, message, retained);
+    }
+
+    inline void print(String key, float value, int decimalPlaces=2){
+      this->print(key, String(value, decimalPlaces));
+    }
+  
+    inline void print(String key, double value, int decimalPlaces=2){
+      this->print(key, String(value, decimalPlaces));
+    }
+  
+    inline void print(String key, int value){
+      this->print(key, String(value));
+    }
+
+  #endif //  #if defined(ESP8266) || defined(ESP32)
+  #endif  // BEENEXT_USE_BEEMQTT
 
 static bool   _beenext_enable;
 
