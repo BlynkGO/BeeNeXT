@@ -17,13 +17,13 @@ void setup() {
       sum += analog_val;
       Serial.print("analog_val = "); Serial.println(analog_val);  
     });
-    t.ready_cb([](){                              // เมื่อครบ 20 รอบแล้ว
+    t.onFinised([](){                              // เมื่อครบ 20 รอบแล้ว
       int analog_avr = (sum - analog_min - analog_max)/18;    // ค่ารวมที่หักค่าต่ำสุด สูงสุดออกไป แล้วทำการเฉลี่ย
       Serial.println("---------------");
       Serial.print  ("analog_avr = "); Serial.println( analog_avr );  // แสดงค่าเฉลี่ย
       Serial.println("---------------");
     });
-  },true);
+  },true);      // true = เริ่มทำงานเลย แล้วค่อยอีกทุกๆ ช่วงเวลาที่กำหนด
 }
 
 void loop() {

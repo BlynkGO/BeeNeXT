@@ -8,10 +8,12 @@ BEENEXT_DATA()          __attribute__((weak, alias("BeeNeXT_NoOpCbk")));
 BEENEXT_CONNECTED()     __attribute__((weak, alias("BeeNeXT_NoOpCbk")));
 BEENEXT_DISCONNECTED()  __attribute__((weak, alias("BeeNeXT_NoOpCbk")));
 /******************************************************/
-#if BEENEXT_USE_HEARTBEAT && BEENEXT_USE_SOFTTIMER
-static SoftTimer timer_delay;
-#endif
 bool BeeNeXT_Class::_beenext_enable = true;
+
+#if BEENEXT_USE_BEEUART_CRC16
+  #if BEENEXT_USE_HEARTBEAT && BEENEXT_USE_SOFTTIMER
+  static SoftTimer timer_delay;
+  #endif
 
 #if defined(ESP32)
   #if ARDUINO_USB_CDC_ON_BOOT
@@ -84,22 +86,20 @@ void BeeNeXT_Class::begin(HardwareSerial *hw_serial){     // Other MCU HardwareS
 
 #endif // #if defined(ESP32)
 
-
-
 #if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
 void BeeNeXT_Class::begin(SoftwareSerial *sw_serial){
   this->end();
   Serial.println("[BeeNeXT] on SoftwareSerial");
   _sw_serial = sw_serial;  // Software Serial ต้อง begin มาเอง
   _sw_serial->setTimeout(50);
-#if defined(ESP8266) || defined(ESP32)
-#else
-  _sw_serial->flush();
-#endif
+  #if defined(ESP8266) || defined(ESP32)
+  #else
+    _sw_serial->flush();
+  #endif
 
-#if BEENEXT_USE_HEARTBEAT && BEENEXT_USE_SOFTTIMER
-  this->init_heartbeat();
-#endif // #if BEENEXT_USE_HEARTBEAT && BEENEXT_USE_SOFTTIMER  
+  #if BEENEXT_USE_HEARTBEAT && BEENEXT_USE_SOFTTIMER
+    this->init_heartbeat();
+  #endif // #if BEENEXT_USE_HEARTBEAT && BEENEXT_USE_SOFTTIMER  
 }
 
 void BeeNeXT_Class::begin(unsigned long baud, uint8_t rx, uint8_t tx){
@@ -108,14 +108,14 @@ void BeeNeXT_Class::begin(unsigned long baud, uint8_t rx, uint8_t tx){
   _is_swserial_alloced = true;
   _sw_serial->begin(baud, rx, tx );
   _sw_serial->setTimeout(50);
-#if defined(ESP8266) || defined(ESP32)
-#else
-  _sw_serial->flush();
-#endif
+  #if defined(ESP8266) || defined(ESP32)
+  #else
+    _sw_serial->flush();
+  #endif
 
-#if BEENEXT_USE_HEARTBEAT && BEENEXT_USE_SOFTTIMER
-  this->init_heartbeat();
-#endif // #if BEENEXT_USE_HEARTBEAT && BEENEXT_USE_SOFTTIMER  
+  #if BEENEXT_USE_HEARTBEAT && BEENEXT_USE_SOFTTIMER
+    this->init_heartbeat();
+  #endif // #if BEENEXT_USE_HEARTBEAT && BEENEXT_USE_SOFTTIMER  
 }
 #endif
 
@@ -225,6 +225,8 @@ uint16_t BeeNeXT_Class::CRC16(uint16_t crc /*0 = init*/, uint8_t *data, size_t l
 uint16_t BeeNeXT_Class::CRC16(uint16_t crc /*0 = init*/, uint8_t data) { 
   return CRC16(crc, &data, 1);
 }
+#endif// #if BEENEXT_USE_BEEUART_CRC16
+
 
 void BeeNeXT_Class::enable(bool en){
   BeeNeXT_Class::_beenext_enable = !!en;
@@ -238,30 +240,34 @@ void BeeNeXT_Class::update(){
 
   if(!this->enable()) return;
 
+#if BEENEXT_USE_BEEUART_CRC16
   if(_hw_serial != NULL) {
     while (_hw_serial->available() > 0) {
       char ch = _hw_serial->read();
       this->_updateChar(ch);
     }
-#if defined(ESP8266) || defined(ESP32)
-#else
-    _hw_serial->flush();
-#endif
+    #if defined(ESP8266) || defined(ESP32)
+    #else
+      _hw_serial->flush();
+    #endif
   }
-#if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
-  else if(_sw_serial != NULL) {
-    while (_sw_serial->available() > 0) {
-      char ch = _sw_serial->read();
-      this->_updateChar(ch);
+  #if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
+    else if(_sw_serial != NULL) {
+      while (_sw_serial->available() > 0) {
+        char ch = _sw_serial->read();
+        this->_updateChar(ch);
+      }
+    #if defined(ESP8266) || defined(ESP32)
+    #else
+        _sw_serial->flush();
+    #endif
     }
-#if defined(ESP8266) || defined(ESP32)
-#else
-    _sw_serial->flush();
-#endif
-  }
-#endif
-
+  #endif
+#endif //#if BEENEXT_USE_BEEUART_CRC16
 }
+
+
+#if BEENEXT_USE_BEEUART_CRC16
 
 void BeeNeXT_Class::_updateChar(char ch){
   static uint8_t  _recv_PreHeaderChars = 0;
@@ -418,3 +424,5 @@ size_t BeeNeXT_Class::value(uint8_t* value, uint16_t valueLength) {
   memcpy(value, _recv_DataBuffer, lengthToCopy);
   return lengthToCopy;
 }
+
+#endif //#if BEENEXT_USE_BEEUART_CRC16

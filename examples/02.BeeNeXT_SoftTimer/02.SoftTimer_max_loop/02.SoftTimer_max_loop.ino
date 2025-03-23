@@ -11,7 +11,7 @@ void setup() {
   timer.setInterval(500,10,[](){             // ตั้งเวลาทำงานเป็นช่วงๆ แบบนี้จะไม่ถูก blocking code เป็นจำนวน 10 ครั้ง
     digitalWrite(LED_PIN, !digitalRead(LED_PIN));
   });
-  timer.ready_cb([](){
+  timer.onFinised([](){
     digitalWrite(LED_PIN,LOW);
     Serial.println("[Timer] done!");
   );

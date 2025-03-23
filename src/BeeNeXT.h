@@ -45,6 +45,11 @@
  *
  * Version 3.1.5  @21/03/68
  *    - รองรับ ESP32P4, ESP32C6 ด้วย
+ *
+ * Version 3.1.6  @23/03/68
+ *    - รองรับ BEENEXT_USE_BEEUART_CRC16, BEENEXT_USE_BEEI2C (default) แต่แรก
+ *    - SoftTimer มี onFinished แทน ready_cb
+ *
  */
 
 #ifndef __BEENEXT_H__
@@ -55,7 +60,7 @@
 /** Minor version number (x.X.x) */
 #define BEENEXT_VERSION_MINOR   1
 /** Patch version number (x.x.X) */
-#define BEENEXT_VERSION_PATCH   5
+#define BEENEXT_VERSION_PATCH   6
 
 #define BEENEXT_VERSION_TEXT    (String(BEENEXT_VERSION_MAJOR)+"."+String(BEENEXT_VERSION_MINOR)+"."+String(BEENEXT_VERSION_PATCH))
 
@@ -83,11 +88,15 @@
 #include <Arduino.h>
 #include "beenext_config.h"
 
+#if BEENEXT_USE_BEEUART_CRC16
 #include <HardwareSerial.h>
-
 #if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0) 
 #include "lib/SoftwareSerial/SoftwareSerial.h"
 #endif
+#elif BEENEXT_USE_BEEI2C
+#include "BeeI2C.h"
+#endif
+
 
 #if BEENEXT_USE_SOFTTIMER
 #include "lib/BeeNeXT_SoftTimer/BeeNeXT_SoftTimer.h"
@@ -117,6 +126,8 @@ extern "C" {
 
 #define BEENEXT_CONNECTION_TIMEOUT      3000
 
+
+#if BEENEXT_USE_BEEUART_CRC16
 enum BeeNeXT_ReceiveState {
   BEENEXT_WAIT_FOR_PREHEADER,
   BEENEXT_WAIT_FOR_PREHEADER_CHECK,
@@ -126,10 +137,13 @@ enum BeeNeXT_ReceiveState {
   BEENEXT_WAIT_FOR_DATA,
   BEENEXT_WAIT_FOR_CHECKSUM
 };
+#endif
 
 class BeeNeXT_Class {
 
 public:
+
+#if BEENEXT_USE_BEEUART_CRC16
   inline void begin(){
     this->end();
     #if defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_NANO)
@@ -192,10 +206,14 @@ public:
   inline void begin(uint8_t rx, uint8_t tx) { this->begin(9600,rx,tx); }
 #endif
   void end();
+#endif // #if BEENEXT_USE_BEEUART_CRC16
+
   void update();
 
   void enable(bool en);
   inline bool enable()                            { return _beenext_enable;               }
+
+#if BEENEXT_USE_BEEUART_CRC16
   inline void heartbeat(bool en){
 #if BEENEXT_USE_HEARTBEAT && BEENEXT_USE_SOFTTIMER
     _heartbeat_enable = !!en;
@@ -285,33 +303,77 @@ public:
   bool   _heartbeat_enable = true;
 #endif
 
-  static bool   _beenext_enable;
-
   inline void protocol_write(uint8_t *data, uint16_t data_len){
     if(_hw_serial != NULL)          _hw_serial->write(data, data_len);
-#if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
-    else if(_sw_serial != NULL)     _sw_serial->write(data, data_len);
-#endif
+    #if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
+      else if(_sw_serial != NULL)     _sw_serial->write(data, data_len);
+    #endif
   }
   inline void protocol_write(uint8_t data) { this->protocol_write(&data, 1); }
   inline void protocol_println()           { uint8_t data[2] = {'\r','\n'}; this->protocol_write(data, 2); }
+#elif BEENEXT_USE_BEEI2C   //#if BEENEXT_USE_BEEUART_CRC16
+  inline void init(void(*fn)(String key, String value)) {
+    McuI2C_Master::init(fn);
+    this->_is_i2c_master = true;
+  }
+
+  #if defined(ESP32)
+  inline void init(uint8_t sda, uint8_t scl, void(*fn)(String key, String value)) {
+    McuI2C_Master::init(sda, scl, fn);
+    this->_is_i2c_master = true;
+  }
+  #endif
+
+  #if defined(ESP32)
+  #if defined(BEENEXT_2_4) || defined(BEENEXT_2_4C) || defined(BEENEXT_3_2) || defined(BEENEXT_3_2C) || defined(BEENEXT_3_5)  || defined(BEENEXT_3_5C) || defined(BEENEXT_4_3) || defined(BEENEXT_4_3C) || defined(BEENEXT_4_3IPS) || defined(BEENEXT_5_0IPS)  || defined(BEENEXT_7_0IPS)
+  inline void begin(void(*fn)(String key, String value)) {
+    BeeI2C_Slave::init(fn);
+  }
+  #endif // #if defined(BEENEXT_3_2) || defined(BEENEXT_3_2C) || defined(BEENEXT_3_5)  || defined(BEENEXT_3_5C)
+  #endif// ESP32
+
+  inline void print(String key, String value){
+    if(this->_is_i2c_master) {
+      McuI2C_Master::print(key, value);
+    }
+    #if defined(ESP32)
+    else{
+      BeeI2C_Slave::print(key, value);
+    }
+    #endif
+  }
+
+  inline void print(String key, float value, int decimalPlaces){
+    this->print(key, String(value, decimalPlaces));
+  }
+
+  inline void print(String key, double value, int decimalPlaces){
+    this->print(key, String(value, decimalPlaces));
+  }
+
+  inline void print(String key, int value){
+    this->print(key, String(value));
+  }
+
+  #endif //if BEENEXT_USE_BEEI2C
+
+static bool   _beenext_enable;
 
 private:
-
-#if ARDUINO_USB_CDC_ON_BOOT
-  #if ARDUINO_USB_MODE   // Hardware CDC mode
-  HWCDC * _hw_serial = NULL;
-  #else  // !ARDUINO_USB_MODE -- Native USB Mode
-  USBCDC * _hw_serial = NULL;
+#if BEENEXT_USE_BEEUART_CRC16
+  #if ARDUINO_USB_CDC_ON_BOOT
+    #if ARDUINO_USB_MODE   // Hardware CDC mode
+    HWCDC * _hw_serial = NULL;
+    #else  // !ARDUINO_USB_MODE -- Native USB Mode
+    USBCDC * _hw_serial = NULL;
+    #endif
+  #else   // !ARDUINO_USB_CDC_ON_BOOT -- Serial is used from UART0
+    HardwareSerial * _hw_serial=NULL;
   #endif
-#else   // !ARDUINO_USB_CDC_ON_BOOT -- Serial is used from UART0
-  HardwareSerial * _hw_serial=NULL;
-#endif
 
-#if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
-
-  bool  _is_swserial_alloced=false;
-#endif
+  #if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
+    bool  _is_swserial_alloced=false;
+  #endif
 
   const char _preHeader[5] = "[BN]";
   char     _recv_PreHeader[5] = {0}; // สำหรับเก็บค่า pre-header ที่ส่งเข้ามา
@@ -321,15 +383,19 @@ private:
   uint16_t _recv_DataLength;
 
 
-#if BEENEXT_USE_HEARTBEAT && BEENEXT_USE_SOFTTIMER
-  SoftTimer _timer_heartbeat;
-  SoftTimer _timer_heartbeat_checker; 
-#endif //#if BEENEXT_USE_HEARTBEAT && BEENEXT_USE_SOFTTIMER
+  #if BEENEXT_USE_HEARTBEAT && BEENEXT_USE_SOFTTIMER
+    SoftTimer _timer_heartbeat;
+    SoftTimer _timer_heartbeat_checker; 
+  #endif //#if BEENEXT_USE_HEARTBEAT && BEENEXT_USE_SOFTTIMER
 
   uint16_t CRC16(uint16_t crc /*0 = init*/, uint8_t *data, size_t length);
   uint16_t CRC16(uint16_t crc /*0 = init*/, uint8_t data);
 
   void _updateChar(char ch);
+
+#elif BEENEXT_USE_BEEI2C 
+  bool _is_i2c_master=false;
+#endif //#if BEENEXT_USE_BEEI2C
 };
 
 extern BeeNeXT_Class BeeNeXT;

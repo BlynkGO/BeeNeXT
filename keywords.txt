@@ -63,6 +63,10 @@ replay	KEYWORD2
 resume	KEYWORD2
 run	KEYWORD2
 
+# BeeI2C
+init	KEYWORD2
+print	KEYWORD2
+
 
 #######################################
 # Instances (KEYWORD2)
