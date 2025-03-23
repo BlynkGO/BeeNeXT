@@ -4,8 +4,8 @@
 /**********************************************
  * BeeNeXT config
  *********************************************/
-#define BEENEXT_USE_BEEI2C              0
-#define BEENEXT_USE_BEEMQTT             1
+#define BEENEXT_USE_BEEI2C              1
+#define BEENEXT_USE_BEEMQTT             0
 #define BEENEXT_USE_BEEUART_CRC16       0
 
 #define BEENEXT_USE_SOFTWARESERIAL      1
