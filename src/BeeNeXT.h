@@ -176,7 +176,7 @@ public:
         Serial1.begin(9600, SERIAL_8N1, 18,19);
       #elif CONFIG_IDF_TARGET_ESP32C6
 
-      #elif defined(BEENEXT_1_28) || defined(BEENEXT_2_4) || defined(BEENEXT_2_4C) || defined(BEENEXT_2_8) || defined(BEENEXT_2_8C) || defined(BEENEXT_3_2) || defined(BEENEXT_3_2C) || defined(BEENEXT_4_3) || defined(BEENEXT_4_3C) || defined(BEENEXT_4_3IPS) || defined(BEENEXT_5_0IPS) || defined(BEENEXT_7_0IPS)
+      #elif defined(BEENEXT_2_4) || defined(BEENEXT_2_4C) || defined(BEENEXT_2_8) || defined(BEENEXT_2_8C) || defined(BEENEXT_3_2) || defined(BEENEXT_3_2C) || defined(BEENEXT_4_3) || defined(BEENEXT_4_3C) || defined(BEENEXT_4_3IPS) || defined(BEENEXT_5_0IPS) || defined(BEENEXT_7_0IPS)
         this->begin(&Serial);  // ให้เอา R หลังขา RX ออก และ short
       #else
         #if ARDUINO_USB_CDC_ON_BOOT
