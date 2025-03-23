@@ -3,6 +3,7 @@
 #if BEENEXT_USE_BEEI2C
 
 #include <BeeNeXT.h>
+#include <vector>
 
 #define WIRE_MASTER_BUS      Wire
 #define BEEI2C_ADDR   0x55
