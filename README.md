@@ -4,6 +4,9 @@
 ให้ MCU ต่างๆ เช่น Arduino UNO, Arduino MEGA, Arduino Nano, ESP8266, ESP32, STM32 ฯลฯ  
 เชื่อมต่อกับ จอสัมผัส BeeNeXT  
   
+Version 3.1.7 : @28/03/68   
+- BeeI2C สำหรับ BeeNeXT4.3, 4.3C, 4.3IPS เพิ่มขา 20 ทำเป็น GND (OUTPUT/LOW)   
+  
 Version 3.1.6 : @23/03/68  
 - รองรับ BEENEXT_USE_BEEI2C (default) แต่แรก  
 - รองรับ BEENEXT_USE_BEEMQTT เชื่อมต่อแบบไร้สาย 
