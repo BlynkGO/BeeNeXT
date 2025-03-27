@@ -52,6 +52,9 @@
  *    - รองรับ BEENEXT_USE_BEEUART_CRC16   
  *    - SoftTimer มี onFinished แทน ready_cb  
  *
+ * Version 3.1.7  @28/03/68
+ *    - เพิ่มขา 20 ให้เป็น OUTPUT LOW เพื่อทำเป็น GND สำหรับ BeeNeXT4.3,4.3C,4.3IPS
+ * 
  */
 
 #ifndef __BEENEXT_H__
