@@ -1,6 +1,6 @@
 // beenext_config.h กำหนดดังนี้
-//       #define BEENEXT_USE_BEEI2C              1
-//       #define BEENEXT_USE_BEEUART             0
+//       #define BEENEXT_USE_BEEI2C              0
+//       #define BEENEXT_USE_BEEUART             1
 //       #define BEENEXT_USE_BEEMQTT             0
 
 #include <BlynkGOv3.h>
@@ -12,7 +12,7 @@ void setup() {
   Serial.begin(115200); Serial.println();
   BlynkGO.begin();
 
-  BeeI2C.onData([](String key, String value){
+  BeeUART.onData([](String key, String value){
     Serial.println(key + " ---> " + value);
     if(key.startsWith("TEMP")){
       float temp = value.toFloat();
@@ -32,7 +32,7 @@ void setup() {
   led.clickable(true);
   led.onClicked([](GWIDGET){
     led.toggle();
-    BeeI2C.print("LED", led.isON());  // ส่ง key "LED" ระบุสถานะ ไปยัง MCU หน้าบ้าน
+    BeeUART.print("LED", led.isON());  // ส่ง key "LED" ระบุสถานะ ไปยัง MCU หน้าบ้าน
   });
 
 }

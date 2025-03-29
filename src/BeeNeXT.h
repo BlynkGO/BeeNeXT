@@ -55,6 +55,10 @@
  * Version 3.1.7  @28/03/68
  *    - เพิ่มขา 20 ให้เป็น OUTPUT LOW เพื่อทำเป็น GND สำหรับ BeeNeXT4.3,4.3C,4.3IPS
  * 
+ * Version 3.1.8  @29/03/68
+ *    - เอาขา 20 เป็น OUTPUT LOW ออก เนื่องจากไปชน ขา I2C ของ Touch สำหรับ BeeNeXT4.3,4.3C,4.3IPS
+ *    - เพิ่ม BeeUART.h/.cpp  BEENEXT_USE_BEEUART
+ * 
  */
 
 #ifndef __BEENEXT_H__
@@ -65,7 +69,7 @@
 /** Minor version number (x.X.x) */
 #define BEENEXT_VERSION_MINOR   1
 /** Patch version number (x.x.X) */
-#define BEENEXT_VERSION_PATCH   6
+#define BEENEXT_VERSION_PATCH   8
 
 #define BEENEXT_VERSION_TEXT    (String(BEENEXT_VERSION_MAJOR)+"."+String(BEENEXT_VERSION_MINOR)+"."+String(BEENEXT_VERSION_PATCH))
 
@@ -93,7 +97,9 @@
 #include <Arduino.h>
 #include "beenext_config.h"
 
-#if BEENEXT_USE_BEEUART_CRC16
+#if BEENEXT_USE_BEEUART
+#include "BeeUART.h"
+#elif BEENEXT_USE_BEEUART_CRC16 
 #include <HardwareSerial.h>
 #if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0) 
 #include "lib/SoftwareSerial/SoftwareSerial.h"
@@ -133,6 +139,8 @@ extern "C" {
 
 #if BEENEXT_USE_BEEI2C
 #define BeeI2C        BeeNeXT
+#elif BEENEXT_USE_BEEUART
+#define BeeUART       BeeNeXT
 #endif
 
 #define BEENEXT_CONNECTION_TIMEOUT      3000
@@ -372,6 +380,44 @@ public:
     this->print(key, String(value));
   }
       // end of #elif BEENEXT_USE_BEEI2C
+  //------------------------------------------------------------------------- BeeUART
+  #elif BEENEXT_USE_BEEUART
+
+  // ใช้ Serial หลัก เป็น BeeUART
+  inline void begin(void(*fn)(String key, String value)) {
+    beeuart::init(fn);
+  }
+
+  #if ARDUINO_USB_CDC_ON_BOOT
+    #if ARDUINO_USB_MODE   // Hardware CDC mode
+      // HWCDC * _hw_serial = NULL;
+      inline void begin(HWCDC *hw_serial, void(*fn)(String key, String value)){
+        beeuart::init(hw_serial, fn);
+      }
+
+    #else  // !ARDUINO_USB_MODE -- Native USB Mode
+      // USBCDC * _hw_serial = NULL;
+      inline void begin(USBCDC *hw_serial, void(*fn)(String key, String value)){
+        beeuart::init(hw_serial, fn);
+      }
+    #endif
+  #else   // !ARDUINO_USB_CDC_ON_BOOT -- Serial is used from UART0
+    // HardwareSerial * _hw_serial=NULL;
+    inline void begin(HardwareSerial *hw_serial, void(*fn)(String key, String value)){
+      beeuart::init(hw_serial, fn);
+    }
+  #endif
+
+  #if BEENEXT_USE_SOFTWARESERIAL && (CONFIG_IDF_TARGET_ESP32S3==0)
+    inline void begin(int8_t rx, int8_t tx, void(*fn)(String key, String value)){
+      beeuart::init(rx, tx, fn);
+    }
+
+    inline void begin(int8_t rx, int8_t tx, uint32_t baud, void(*fn)(String key, String value)){
+      beeuart::init(rx, tx, baud, fn);
+    }
+    #endif
+
   //------------------------------------------------------------------------- BeeMQTT
   #elif BEENEXT_USE_BEEMQTT
   #if defined(ESP8266) || defined(ESP32)

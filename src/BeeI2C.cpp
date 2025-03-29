@@ -13,6 +13,7 @@ void(*_func_i2c_recv_cb)(String key, String value);
 void McuI2C_Master::init(void(*fn)(String key, String value)){
   _func_i2c_recv_cb = fn;
   WIRE_MASTER_BUS.begin();
+  Serial.println("[BeeI2C] on 'I2C Master'");
   static SoftTimer timer;
   timer.setInterval(1,[](){
     size_t sz = WIRE_MASTER_BUS.requestFrom(0x55, I2C_REQ_SIZE);
@@ -33,6 +34,7 @@ void McuI2C_Master::init(void(*fn)(String key, String value)){
 void McuI2C_Master::init(uint8_t sda, uint8_t scl, void(*fn)(String key, String value)){
   _func_i2c_recv_cb = fn;
   WIRE_MASTER_BUS.begin(sda, scl);
+  Serial.printf("[BeeI2C] on 'I2C Master' (sda %d, scl %d)\n", sda, scl);
   static SoftTimer timer;
   timer.setInterval(1,[](){
     size_t sz = WIRE_MASTER_BUS.requestFrom(0x55, I2C_REQ_SIZE);

@@ -1,5 +1,11 @@
 // ติดตั้ง ไลบรารี่ PubSubClient ด้วย
 
+// beenext_config.h กำหนดดังนี้
+//       #define BEENEXT_USE_BEEI2C              0
+//       #define BEENEXT_USE_BEEUART             0
+//       #define BEENEXT_USE_BEEMQTT             1
+
+
 #if defined(ESP8266)
   #include <ESP8266WiFi.h>
 #elif defined(ESP32)
@@ -7,8 +13,8 @@
 #endif
 #include <BeeNeXT.h>
 
-#define SSID          "MiHomePhone6"
-#define PASSWORD      "123456789"
+#define SSID          "---------------"
+#define PASSWORD      "---------------"
 
 #define MQTT_HOST     "broker.emqx.io"
 #define MQTT_PORT     1883
