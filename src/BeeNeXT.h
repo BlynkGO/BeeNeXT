@@ -59,6 +59,10 @@
  *    - เอาขา 20 เป็น OUTPUT LOW ออก เนื่องจากไปชน ขา I2C ของ Touch สำหรับ BeeNeXT4.3,4.3C,4.3IPS
  *    - เพิ่ม BeeUART.h/.cpp  BEENEXT_USE_BEEUART
  * 
+ * Version 3.1.9  @29/03/68
+ *    - fix BEENEXT_USE_BEEUART เพิ่ม onData ฝั่งจอ BeeNeXT
+ *    - ปรับแก้ตัวอย่าง
+ * 
  */
 
 #ifndef __BEENEXT_H__
@@ -69,7 +73,7 @@
 /** Minor version number (x.X.x) */
 #define BEENEXT_VERSION_MINOR   1
 /** Patch version number (x.x.X) */
-#define BEENEXT_VERSION_PATCH   8
+#define BEENEXT_VERSION_PATCH   9
 
 #define BEENEXT_VERSION_TEXT    (String(BEENEXT_VERSION_MAJOR)+"."+String(BEENEXT_VERSION_MINOR)+"."+String(BEENEXT_VERSION_PATCH))
 
@@ -416,7 +420,21 @@ public:
     inline void begin(int8_t rx, int8_t tx, uint32_t baud, void(*fn)(String key, String value)){
       beeuart::init(rx, tx, baud, fn);
     }
-    #endif
+  #endif
+
+  #if defined(BEENEXT_2_4) || defined(BEENEXT_2_4C) || defined(BEENEXT_2_8) || defined(BEENEXT_2_8C) || defined(BEENEXT_3_2) || defined(BEENEXT_3_2C) || defined(BEENEXT_4_3) || defined(BEENEXT_4_3C) || defined(BEENEXT_4_3IPS) || defined(BEENEXT_5_0IPS) || defined(BEENEXT_7_0IPS)
+  inline void onData(void(*fn)(String key, String value)) {
+    beeuart::init(fn);
+  }
+  inline void onData(uint8_t rx, uint8_t tx, void(*fn)(String key, String value)){
+    Serial2.begin(9600, SERIAL_8N1, rx, tx);
+    beeuart::init(&Serial2, fn);
+  }
+  inline void onData(uint8_t rx, uint8_t tx, uint32_t baud, void(*fn)(String key, String value)){
+    Serial2.begin(baud, SERIAL_8N1, rx, tx);
+    beeuart::init(&Serial2, fn);
+  }
+  #endif
 
   //------------------------------------------------------------------------- BeeMQTT
   #elif BEENEXT_USE_BEEMQTT

@@ -12,6 +12,9 @@ void setup() {
   Serial.begin(115200); Serial.println();
   BlynkGO.begin();
 
+  /*************************************
+   * ใช้ Serial เป็น ขาต่อ ไปยัง MCU หลัก (ใช้ร่วม Serial Monitor)
+   *********************/  
   BeeUART.onData([](String key, String value){
     Serial.println(key + " ---> " + value);
     if(key.startsWith("TEMP")){
@@ -23,6 +26,21 @@ void setup() {
     }
     
   });
+
+  /*************************************
+   * ใช้ Serial2 เป็น ขาต่อ ไปยัง MCU หลัก (ใช้ร่วม Serial Monitor)
+   *********************/  
+  // BeeUART.onData(17,18, [](String key, String value){  // เช่นจอ BeeNeXT4.3, 5.0, 7.0
+  //   Serial.println(key + " ---> " + value);
+  //   if(key.startsWith("TEMP")){
+  //     float temp = value.toFloat();
+  //     gauge = temp;
+  //   }else
+  //   if(key.startsWith("HUMID")){
+  //     //....
+  //   }
+  // });
+
 
   gauge.color(TFT_BLUE, TFT_RED);
   gauge.decimal(2);

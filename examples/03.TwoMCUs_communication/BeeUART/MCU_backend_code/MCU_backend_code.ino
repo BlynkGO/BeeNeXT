@@ -5,15 +5,6 @@
 
 #include <BeeNeXT.h>
 
-// วิธีต่อ MCU หลังบ้าน แบบ BeeI2C กับจอ BeeNeXT
-// UNO  ต่อขา SDA A4, SCL A5, GND ร่วม
-// Nano ต่อขา SDA A4, SCL A5, GND ร่วม
-// MEGA ต่อขา SDA 20, SCL 21, GND ร่วม
-//
-// ESP8266 ต่อขา SDA 4, SCL 5, GND ร่วม  หรือ กำหนดขาเองได้
-// NodeMCU ต่อขา SDA D2, SCL D1, GND ร่วม หรือ กำหนดขาเองได้
-// ESP32 ต่อขา SDA 21, SCL 22, GND ร่วม   หรือ กำหนดขาเองได้
-
 #if defined(ESP8266) || defined(ESP32)
   #define LED_PIN     2
   #define LED_ON      LOW
@@ -30,6 +21,9 @@ void setup() {
   pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, LED_OFF);
 
+  /*************************************
+   * ใช้ Serial เป็น ขาต่อ ไปยัง UART ฝั่งจอ
+   *********************/
   LCD.begin([](String key, String value){
     Serial.println(key + " ---> " + value);
     if(key.startsWith("LED")) {
@@ -37,6 +31,31 @@ void setup() {
       digitalWrite(LED_PIN, led_state? LED_ON : LED_OFF);
     }
   });
+  /*************************************
+   * ใช้ Serial2 เป็น ขาต่อ ไปยัง UART ฝั่งจอ  (สำหรับ MEGA, ESP32)
+   *********************/
+  // Serial2.begin(9600);  // MEGA ขา 17 (rx2), 16 (tx2);  ESP32 ขา 17 (rx2), 16 (tx2)
+  // Serial2.begin(9600, SERIAL_8N1, 21, 22);  // ESP32 กำหนดขาเองได้
+  // Serial2.begin(9600, SERIAL_8N1, 17, 18);  // ESP32S3 กำหนดขาเองได้
+  // LCD.begin(&Serial2, [](String key, String value){
+  //   Serial.println(key + " ---> " + value);
+  //   if(key.startsWith("LED")) {
+  //     bool led_state = value.toInt();
+  //     digitalWrite(LED_PIN, led_state? LED_ON : LED_OFF);
+  //   }
+  // });
+  /*************************************
+   * ใช้ SoftwareSerial เป็น ขาต่อ ไปยัง UART ฝั่งจอ เช่น UNO, NANO, MEGA, ESP8266, ESP32
+   *********************/
+  // LCD.begin(16,17, 9600, [](String key, String value)  // หรือ
+  // LCD.begin(16,17, [](String key, String value)
+  // {
+  //   Serial.println(key + " ---> " + value);
+  //   if(key.startsWith("LED")) {
+  //     bool led_state = value.toInt();
+  //     digitalWrite(LED_PIN, led_state? LED_ON : LED_OFF);
+  //   }
+  // });
 
   static SoftTimer timer;
   timer.setInterval(1000,[](){
