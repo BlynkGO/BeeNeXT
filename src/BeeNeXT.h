@@ -422,7 +422,8 @@ public:
     }
   #endif
 
-  #if defined(BEENEXT_2_4) || defined(BEENEXT_2_4C) || defined(BEENEXT_2_8) || defined(BEENEXT_2_8C) || defined(BEENEXT_3_2) || defined(BEENEXT_3_2C) || defined(BEENEXT_4_3) || defined(BEENEXT_4_3C) || defined(BEENEXT_4_3IPS) || defined(BEENEXT_5_0IPS) || defined(BEENEXT_7_0IPS)
+  #if defined(ESP32)
+  //#if defined(BEENEXT_2_4) || defined(BEENEXT_2_4C) || defined(BEENEXT_2_8) || defined(BEENEXT_2_8C) || defined(BEENEXT_3_2) || defined(BEENEXT_3_2C) || defined(BEENEXT_4_3) || defined(BEENEXT_4_3C) || defined(BEENEXT_4_3IPS) || defined(BEENEXT_5_0IPS) || defined(BEENEXT_7_0IPS)
   inline void onData(void(*fn)(String key, String value)) {
     beeuart::init(fn);
   }
@@ -434,6 +435,7 @@ public:
     Serial2.begin(baud, SERIAL_8N1, rx, tx);
     beeuart::init(&Serial2, fn);
   }
+  //#endif
   #endif
 
   //------------------------------------------------------------------------- BeeMQTT
