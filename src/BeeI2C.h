@@ -32,7 +32,7 @@ namespace BeeI2C_Slave {
   inline void init(void(*fn)(String key, String value)){
     BeeI2C_Slave::init(17, 18, fn);
     #if defined(BEENEXT_4_3) || defined(BEENEXT_4_3C) || defined(BEENEXT_4_3IPS)
-    pinMode(20, OUTPUT); digitalWrite(20, LOW)
+    pinMode(20, OUTPUT); digitalWrite(20, LOW);
     #endif
   }
   inline void onData(void(*fn)(String key, String value))                                 { BeeI2C_Slave::init(fn); }

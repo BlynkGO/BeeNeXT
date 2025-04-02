@@ -1,6 +1,8 @@
 #include <BeeNeXT.h>
 #include "BeeUART.h"
 
+#if BEENEXT_USE_BEEUART
+
 void(*_func_uart_recv_cb)(String key, String value);
 
 #if ARDUINO_USB_CDC_ON_BOOT
@@ -187,3 +189,4 @@ void beeuart::print(String key, int value){
   beeuart::print(key, String(value));
 }
 
+#endif //#if BEENEXT_USE_BEEUART

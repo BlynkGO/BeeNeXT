@@ -63,6 +63,10 @@
  *    - fix BEENEXT_USE_BEEUART เพิ่ม onData ฝั่งจอ BeeNeXT
  *    - ปรับแก้ตัวอย่าง
  * 
+ * Version 3.1.10  @29/03/68
+ *    - fix BEENEXT_USE_BEEUART สำหรับ ESP32P4
+ *    - fix ;
+ * 
  */
 
 #ifndef __BEENEXT_H__
@@ -73,7 +77,7 @@
 /** Minor version number (x.X.x) */
 #define BEENEXT_VERSION_MINOR   1
 /** Patch version number (x.x.X) */
-#define BEENEXT_VERSION_PATCH   9
+#define BEENEXT_VERSION_PATCH   10
 
 #define BEENEXT_VERSION_TEXT    (String(BEENEXT_VERSION_MAJOR)+"."+String(BEENEXT_VERSION_MINOR)+"."+String(BEENEXT_VERSION_PATCH))
 
