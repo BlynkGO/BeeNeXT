@@ -31,6 +31,7 @@ void setup() {
   gauge.color(TFT_BLUE, TFT_RED);
   gauge.decimal(2);
 
+  led.position(10,10);
   led.size(80,80);
   led.color(TFT_BLUE);
   led.clickable(true);

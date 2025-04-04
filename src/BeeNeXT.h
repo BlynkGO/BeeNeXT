@@ -67,6 +67,9 @@
  *    - fix BEENEXT_USE_BEEUART สำหรับ ESP32P4
  *    - fix BeeMQTT ฝั่ง MCU หลัก;
  * 
+ * Version 3.1.11  @04/04/68
+ *    - fix BeeMQTT ฝั่ง จอ BeeNeXT ไม่ให้ มี error BeeMQTT ที่จะไม่มีให้ใช้;
+ * 
  */
 
 #ifndef __BEENEXT_H__
@@ -77,7 +80,7 @@
 /** Minor version number (x.X.x) */
 #define BEENEXT_VERSION_MINOR   1
 /** Patch version number (x.x.X) */
-#define BEENEXT_VERSION_PATCH   10
+#define BEENEXT_VERSION_PATCH   11
 
 #define BEENEXT_VERSION_TEXT    (String(BEENEXT_VERSION_MAJOR)+"."+String(BEENEXT_VERSION_MINOR)+"."+String(BEENEXT_VERSION_PATCH))
 
@@ -444,6 +447,9 @@ public:
 
   //------------------------------------------------------------------------- BeeMQTT
   #elif BEENEXT_USE_BEEMQTT
+  #if defined(BEENEXT_2_4) || defined(BEENEXT_2_4C) || defined(BEENEXT_2_8) || defined(BEENEXT_2_8C) || defined(BEENEXT_3_2) || defined(BEENEXT_3_2C) || defined(BEENEXT_4_3) || defined(BEENEXT_4_3C) || defined(BEENEXT_4_3IPS) || defined(BEENEXT_5_0IPS) || defined(BEENEXT_7_0IPS)
+  #else
+
   #if defined(ESP8266) || defined(ESP32)
     inline void client_id(String client_id) {
       BeeMQTT::client_id(client_id);
@@ -510,6 +516,7 @@ public:
     }
 
   #endif //  #if defined(ESP8266) || defined(ESP32)
+  #endif // defined(BEENEXT_2_4) || defined(BEENEXT_2_4C) || defined(BEENEXT_2_8) || defined(BEENEXT_2_8C) || defined(BEENEXT_3_2) || defined(BEENEXT_3_2C) || defined(BEENEXT_4_3) || defined(BEENEXT_4_3C) || defined(BEENEXT_4_3IPS) || defined(BEENEXT_5_0IPS) || defined(BEENEXT_7_0IPS)
   #endif  // BEENEXT_USE_BEEMQTT
 
 static bool   _beenext_enable;
