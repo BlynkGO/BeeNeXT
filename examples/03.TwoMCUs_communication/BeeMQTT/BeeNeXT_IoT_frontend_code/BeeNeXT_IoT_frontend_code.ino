@@ -39,7 +39,7 @@ void setup() {
     MQTT.publish("/myBeeNeXT/LED", String(led.isON()));  // ส่ง key "LED" ระบุสถานะ ไปยัง MCU หน้าบ้าน
   });
 
-  MQTT.setServer( MQTT_HOST, MQTT_PORT, MQTT_USER, MQTT_PASSWORD );
+  MQTT.setServer( MQTT_HOST, MQTT_PORT, MQTT_USER, MQTT_PASS );
   MQTT.onMessage([]( String topic, String message){
     Serial.println(topic+ " ---> "+ message);
     if(String.startsWith("/mymcu/TEMP")){
