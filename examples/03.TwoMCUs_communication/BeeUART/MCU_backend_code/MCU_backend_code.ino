@@ -7,8 +7,8 @@
 
 #if defined(ESP8266) || defined(ESP32)
   #define LED_PIN     2
-  #define LED_ON      LOW
-  #define LED_OFF     HIGH
+  #define LED_ON      HIGH
+  #define LED_OFF     LOW
 #else  // UNO, MEGA, NANO
   #define LED_PIN     13
   #define LED_ON      HIGH
