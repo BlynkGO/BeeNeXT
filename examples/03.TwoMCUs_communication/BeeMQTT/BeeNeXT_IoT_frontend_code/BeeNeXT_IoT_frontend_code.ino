@@ -8,14 +8,15 @@ build_flags=
 
 #include <BlynkGOv3.h>
 
+
 #define MQTT_HOST     "broker.emqx.io"
 #define MQTT_PORT     1883
 #define MQTT_USER     ""
 #define MQTT_PASS     ""
 
+
 GWiFiManager wifi_manager;
 GLabel label;
-
 GGaugeRainbow gauge;
 GLed  led;
 
@@ -35,7 +36,7 @@ void setup() {
   led.clickable(true);
   led.onClicked([](GWIDGET){
     led.toggle();
-    MQTT.publish("/myBeeNeXT/LED", led.isON());  // ส่ง key "LED" ระบุสถานะ ไปยัง MCU หน้าบ้าน
+    MQTT.publish("/myBeeNeXT/LED", String(led.isON()));  // ส่ง key "LED" ระบุสถานะ ไปยัง MCU หน้าบ้าน
   });
 
   MQTT.setServer( MQTT_HOST, MQTT_PORT, MQTT_USER, MQTT_PASSWORD );
