@@ -50,8 +50,8 @@ void setup() {
 
   static SoftTimer timer;
   timer.setInterval(1000,[](){
-    float temp  = (float) random(20, 50)/10.0;  // ของจริงให้อ่านค่าจาก sensor
-    float humid = (float) random(60, 90)/10.0;  // ของจริงให้อ่านค่าจาก sensor
+    float temp  = (float) random(200, 500)/10.0;  // ของจริงให้อ่านค่าจาก sensor
+    float humid = (float) random(600, 900)/10.0;  // ของจริงให้อ่านค่าจาก sensor
     Serial.printf("[TEMP] %.1f ; [HUMID] %.1f\n", temp, humid);
     LCD.publish("/mymcu/TEMP" , temp);     // ส่งไปแสดงยังจอ BeeNeXT ด้วย key "TEMP"  และ value ที่ส่ง ส่งได้ทั้ง จำนวนเต็ม, จำนวนจริง หรือ ข้อความก็ได้ ตามต้องการ
     LCD.publish("/mymcu/HUMID", humid);    // ส่งไปแสดงยังจอ BeeNeXT ด้วย key "HUMID" และ value ที่ส่ง ส่งได้ทั้ง จำนวนเต็ม, จำนวนจริง หรือ ข้อความก็ได้ ตามต้องการ
