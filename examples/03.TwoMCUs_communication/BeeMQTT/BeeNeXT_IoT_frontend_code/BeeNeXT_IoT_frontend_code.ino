@@ -42,11 +42,11 @@ void setup() {
   MQTT.setServer( MQTT_HOST, MQTT_PORT, MQTT_USER, MQTT_PASS );
   MQTT.onMessage([]( String topic, String message){
     Serial.println(topic+ " ---> "+ message);
-    if(String.startsWith("/mymcu/TEMP")){
+    if(topic.startsWith("/mymcu/TEMP")){
       float temp = message.toFloat();
       gauge = temp;
     }else
-    if(String.startsWith("/mymcu/HUMID")){
+    if(topic.startsWith("/mymcu/HUMID")){
       // ...
     }
   });
