@@ -63,7 +63,7 @@
  *    - fix BEENEXT_USE_BEEUART เพิ่ม onData ฝั่งจอ BeeNeXT
  *    - ปรับแก้ตัวอย่าง
  * 
- * Version 3.1.10  @29/03/68
+ * Version 3.1.10  @04/04/68
  *    - fix BEENEXT_USE_BEEUART สำหรับ ESP32P4
  *    - fix BeeMQTT ฝั่ง MCU หลัก;
  * 
