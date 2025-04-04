@@ -65,7 +65,7 @@
  * 
  * Version 3.1.10  @29/03/68
  *    - fix BEENEXT_USE_BEEUART สำหรับ ESP32P4
- *    - fix ;
+ *    - fix BeeMQTT ฝั่ง MCU หลัก;
  * 
  */
 
@@ -473,7 +473,6 @@ public:
     {
       BeeMQTT::init(mqtt_host, 1883, "", "", fn);
     }
-
     
     inline void subscribe(String topic, uint8_t qos=0){
       BeeMQTT::subscribe(topic, qos);

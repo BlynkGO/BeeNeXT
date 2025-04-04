@@ -82,7 +82,7 @@ typedef struct {
   String value;
 } beei2c_data_t;
 
-std::vector<beei2c_data_t> beei2c_vector;
+static std::vector<beei2c_data_t> beei2c_vector;
 // void(*_func_i2c_recv_cb)(String key, String value);
 
 void BeeI2C_Slave::init(uint8_t sda, uint8_t scl,void(*fn)(String key, String value)){
