@@ -4,6 +4,10 @@
 ให้ MCU ต่างๆ เช่น Arduino UNO, Arduino MEGA, Arduino Nano, ESP8266, ESP32, STM32 ฯลฯ  
 เชื่อมต่อกับ จอสัมผัส BeeNeXT  
   
+Version 3.1.10 : @04/04/68   
+- fix BEENEXT_USE_BEEUART สำหรับ ESP32P4  
+- fix BeeMQTT ฝั่ง MCU หลัก  
+  
 Version 3.1.9 : @29/03/68   
 - fix BEENEXT_USE_BEEUART เพิ่ม onData ฝั่งจอ BeeNeXT  
 - ปรับแก้ตัวอย่าง  
