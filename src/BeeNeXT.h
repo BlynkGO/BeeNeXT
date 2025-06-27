@@ -70,6 +70,9 @@
  * Version 3.1.11  @04/04/68
  *    - fix BeeMQTT ฝั่ง จอ BeeNeXT ไม่ให้ มี error BeeMQTT ที่จะไม่มีให้ใช้;
  * 
+ * Version 3.1.12  @27/06/68
+ *    - fix for BeeNeXT1.9IPS, BeeNeXT3.5, BeeNeXT3.5C
+ * 
  */
 
 #ifndef __BEENEXT_H__
@@ -80,7 +83,7 @@
 /** Minor version number (x.X.x) */
 #define BEENEXT_VERSION_MINOR   1
 /** Patch version number (x.x.X) */
-#define BEENEXT_VERSION_PATCH   11
+#define BEENEXT_VERSION_PATCH   12
 
 #define BEENEXT_VERSION_TEXT    (String(BEENEXT_VERSION_MAJOR)+"."+String(BEENEXT_VERSION_MINOR)+"."+String(BEENEXT_VERSION_PATCH))
 
@@ -198,8 +201,9 @@ public:
         Serial1.begin(9600, SERIAL_8N1, 18,19);
       #elif CONFIG_IDF_TARGET_ESP32C6
 
-      #elif defined(BEENEXT_2_4) || defined(BEENEXT_2_4C) || defined(BEENEXT_2_8) || defined(BEENEXT_2_8C) || defined(BEENEXT_3_2) || defined(BEENEXT_3_2C) || defined(BEENEXT_4_3) || defined(BEENEXT_4_3C) || defined(BEENEXT_4_3IPS) || defined(BEENEXT_5_0IPS) || defined(BEENEXT_7_0IPS)
-        this->begin(&Serial);  // ให้เอา R หลังขา RX ออก และ short
+      #elif defined(BEENEXT_2_4) || defined(BEENEXT_2_4C) || defined(BEENEXT_2_8) || defined(BEENEXT_2_8C) || defined(BEENEXT_3_2) || defined(BEENEXT_3_2C) || defined(BEENEXT_3_5) || defined(BEENEXT_3_5C) || defined(BEENEXT_4_3) || defined(BEENEXT_4_3C) || defined(BEENEXT_4_3IPS) || defined(BEENEXT_5_0IPS) || defined(BEENEXT_7_0IPS)
+
+      this->begin(&Serial);  // ให้เอา R หลังขา RX ออก และ short
       #else
         #if ARDUINO_USB_CDC_ON_BOOT
           #if ARDUINO_USB_MODE   // Hardware CDC mode
@@ -447,7 +451,7 @@ public:
 
   //------------------------------------------------------------------------- BeeMQTT
   #elif BEENEXT_USE_BEEMQTT
-  #if defined(BEENEXT_2_4) || defined(BEENEXT_2_4C) || defined(BEENEXT_2_8) || defined(BEENEXT_2_8C) || defined(BEENEXT_3_2) || defined(BEENEXT_3_2C) || defined(BEENEXT_4_3) || defined(BEENEXT_4_3C) || defined(BEENEXT_4_3IPS) || defined(BEENEXT_5_0IPS) || defined(BEENEXT_7_0IPS)
+  #if defined(BEENEXT_2_4) || defined(BEENEXT_2_4C) || defined(BEENEXT_2_8) || defined(BEENEXT_2_8C) || defined(BEENEXT_3_2) || defined(BEENEXT_3_2C) || defined(BEENEXT_3_5) || defined(BEENEXT_3_5C) || defined(BEENEXT_4_3) || defined(BEENEXT_4_3C) || defined(BEENEXT_4_3IPS) || defined(BEENEXT_5_0IPS) || defined(BEENEXT_7_0IPS)
   #else
 
   #if defined(ESP8266) || defined(ESP32)

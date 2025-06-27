@@ -6,7 +6,7 @@
  *********************************************/
 #define BEENEXT_USE_BEEI2C              0
 #define BEENEXT_USE_BEEUART             0
-#define BEENEXT_USE_BEEMQTT             1
+#define BEENEXT_USE_BEEMQTT             0
 #define BEENEXT_USE_BEEUART_CRC16       0   // expire!  ใช้ BEENEXT_USE_BEEUART แทน
 
 #define BEENEXT_USE_SOFTWARESERIAL      0   // หากใช้ต้องเปิด BEENEXT_USE_BEEUART_CRC16 หรือ BEENEXT_USE_BEEUART เป็น 1 ด้วย
