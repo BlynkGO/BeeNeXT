@@ -73,6 +73,9 @@
  * Version 3.1.12  @27/06/68
  *    - fix for BeeNeXT1.9IPS, BeeNeXT3.5, BeeNeXT3.5C
  * 
+ * Version 3.1.13  @22/09/68
+ *    - fix BeeUart ให้มีคำสัง print, และ กรอง [BN] ออก
+ * 
  */
 
 #ifndef __BEENEXT_H__
@@ -83,7 +86,7 @@
 /** Minor version number (x.X.x) */
 #define BEENEXT_VERSION_MINOR   1
 /** Patch version number (x.x.X) */
-#define BEENEXT_VERSION_PATCH   12
+#define BEENEXT_VERSION_PATCH   13
 
 #define BEENEXT_VERSION_TEXT    (String(BEENEXT_VERSION_MAJOR)+"."+String(BEENEXT_VERSION_MINOR)+"."+String(BEENEXT_VERSION_PATCH))
 
@@ -448,6 +451,22 @@ public:
   }
   //#endif
   #endif
+
+  inline void print(String key, String value){
+    beeuart::print(key, value);
+  }
+
+  inline void print(String key, float value, int decimalPlaces=2){
+    this->print(key, String(value, decimalPlaces));
+  }
+
+  inline void print(String key, double value, int decimalPlaces=2){
+    this->print(key, String(value, decimalPlaces));
+  }
+
+  inline void print(String key, int value){
+    this->print(key, String(value));
+  }
 
   //------------------------------------------------------------------------- BeeMQTT
   #elif BEENEXT_USE_BEEMQTT

@@ -65,11 +65,19 @@ void beeuart::init(HWCDC *hw_serial, void(*fn)(String key, String value)){
     if(_hw_serial != NULL) {
       if(_hw_serial->available()){
         String raw = _hw_serial->readStringUntil('\n'); raw.trim();
-        if(raw.indexOf(":")> 0) {
-          String key    = raw.substring(0, raw.indexOf(":"));
-          String value  = raw.substring(raw.indexOf(":") + 1);
-          if(_func_uart_recv_cb) _func_uart_recv_cb(key, value);
+        if(raw.startsWith("[BN]")) {
+          raw.replace("[BN]", "");
+          if(raw.indexOf(":")> 0) {
+            String key    = raw.substring(0, raw.indexOf(":"));
+            String value  = raw.substring(raw.indexOf(":") + 1);
+            if(_func_uart_recv_cb) _func_uart_recv_cb(key, value);
+          }
         }
+        // if(raw.indexOf(":")> 0) {
+        //   String key    = raw.substring(0, raw.indexOf(":"));
+        //   String value  = raw.substring(raw.indexOf(":") + 1);
+        //   if(_func_uart_recv_cb) _func_uart_recv_cb(key, value);
+        // }
       }
     }
   });
@@ -91,11 +99,19 @@ void beeuart::init(USBCDC *hw_serial, void(*fn)(String key, String value)){
     if(_hw_serial != NULL) {
       if(_hw_serial->available()){
         String raw = _hw_serial->readStringUntil('\n'); raw.trim();
-        if(raw.indexOf(":")> 0) {
-          String key    = raw.substring(0, raw.indexOf(":"));
-          String value  = raw.substring(raw.indexOf(":") + 1);
-          if(_func_uart_recv_cb) _func_uart_recv_cb(key, value);
+        if(raw.startsWith("[BN]")) {
+          raw.replace("[BN]", "");
+          if(raw.indexOf(":")> 0) {
+            String key    = raw.substring(0, raw.indexOf(":"));
+            String value  = raw.substring(raw.indexOf(":") + 1);
+            if(_func_uart_recv_cb) _func_uart_recv_cb(key, value);
+          }
         }
+        // if(raw.indexOf(":")> 0) {
+        //   String key    = raw.substring(0, raw.indexOf(":"));
+        //   String value  = raw.substring(raw.indexOf(":") + 1);
+        //   if(_func_uart_recv_cb) _func_uart_recv_cb(key, value);
+        // }
       }
     }
   });
@@ -118,11 +134,19 @@ void beeuart::init(HardwareSerial *hw_serial, void(*fn)(String key, String value
     if(_hw_serial != NULL) {
       if(_hw_serial->available()){
         String raw = _hw_serial->readStringUntil('\n'); raw.trim();
-        if(raw.indexOf(":")> 0) {
-          String key    = raw.substring(0, raw.indexOf(":"));
-          String value  = raw.substring(raw.indexOf(":") + 1);
-          if(_func_uart_recv_cb) _func_uart_recv_cb(key, value);
+        if(raw.startsWith("[BN]")) {
+          raw.replace("[BN]", "");
+          if(raw.indexOf(":")> 0) {
+            String key    = raw.substring(0, raw.indexOf(":"));
+            String value  = raw.substring(raw.indexOf(":") + 1);
+            if(_func_uart_recv_cb) _func_uart_recv_cb(key, value);
+          }
         }
+        // if(raw.indexOf(":")> 0) {
+        //   String key    = raw.substring(0, raw.indexOf(":"));
+        //   String value  = raw.substring(raw.indexOf(":") + 1);
+        //   if(_func_uart_recv_cb) _func_uart_recv_cb(key, value);
+        // }
       }
     }
   });
@@ -149,11 +173,19 @@ void beeuart::init(int8_t rx, int8_t tx, uint32_t baud, void(*fn)(String key, St
     if(_sw_serial != NULL) {
       if(_sw_serial->available()){
         String raw = _sw_serial->readStringUntil('\n'); raw.trim();
-        if(raw.indexOf(":")> 0) {
-          String key    = raw.substring(0, raw.indexOf(":"));
-          String value  = raw.substring(raw.indexOf(":") + 1);
-          if(_func_uart_recv_cb) _func_uart_recv_cb(key, value);
+        if(raw.startsWith("[BN]")) {
+          raw.replace("[BN]", "");
+          if(raw.indexOf(":")> 0) {
+            String key    = raw.substring(0, raw.indexOf(":"));
+            String value  = raw.substring(raw.indexOf(":") + 1);
+            if(_func_uart_recv_cb) _func_uart_recv_cb(key, value);
+          }
         }
+        // if(raw.indexOf(":")> 0) {
+        //   String key    = raw.substring(0, raw.indexOf(":"));
+        //   String value  = raw.substring(raw.indexOf(":") + 1);
+        //   if(_func_uart_recv_cb) _func_uart_recv_cb(key, value);
+        // }
       }
     }
   });
