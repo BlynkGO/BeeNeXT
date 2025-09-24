@@ -4,6 +4,9 @@
 ให้ MCU ต่างๆ เช่น Arduino UNO, Arduino MEGA, Arduino Nano, ESP8266, ESP32, STM32 ฯลฯ  
 เชื่อมต่อกับ จอสัมผัส BeeNeXT  
   
+Version 3.1.14 @24/09/68  
+- รองรับ USB CDC on boot : Enable ได้ด้วย  
+  
 Version 3.1.13  @22/09/68  
 - fix BeeUart ให้มีคำสัง print, และ กรอง [BN] ออก  
   
