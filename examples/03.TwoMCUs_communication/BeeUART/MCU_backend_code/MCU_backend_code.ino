@@ -1,6 +1,6 @@
 // beenext_config.h กำหนดดังนี้
-//       #define BEENEXT_USE_BEEI2C              1
-//       #define BEENEXT_USE_BEEUART             0
+//       #define BEENEXT_USE_BEEI2C              0
+//       #define BEENEXT_USE_BEEUART             1
 //       #define BEENEXT_USE_BEEMQTT             0
 
 #include <BeeNeXT.h>

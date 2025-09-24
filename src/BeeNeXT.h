@@ -76,6 +76,9 @@
  * Version 3.1.13  @22/09/68
  *    - fix BeeUart ให้มีคำสัง print, และ กรอง [BN] ออก
  * 
+ * Version 3.1.14  @24/09/68
+ *    - รองรับ USB CDC on boot : Enable  ได้ด้วย
+ * 
  */
 
 #ifndef __BEENEXT_H__
@@ -86,7 +89,7 @@
 /** Minor version number (x.X.x) */
 #define BEENEXT_VERSION_MINOR   1
 /** Patch version number (x.x.X) */
-#define BEENEXT_VERSION_PATCH   13
+#define BEENEXT_VERSION_PATCH   14
 
 #define BEENEXT_VERSION_TEXT    (String(BEENEXT_VERSION_MAJOR)+"."+String(BEENEXT_VERSION_MINOR)+"."+String(BEENEXT_VERSION_PATCH))
 
@@ -441,15 +444,19 @@ public:
   inline void onData(void(*fn)(String key, String value)) {
     beeuart::init(fn);
   }
-  inline void onData(uint8_t rx, uint8_t tx, void(*fn)(String key, String value)){
-    Serial2.begin(9600, SERIAL_8N1, rx, tx);
-    beeuart::init(&Serial2, fn);
-  }
-  inline void onData(uint8_t rx, uint8_t tx, uint32_t baud, void(*fn)(String key, String value)){
-    Serial2.begin(baud, SERIAL_8N1, rx, tx);
-    beeuart::init(&Serial2, fn);
-  }
-  //#endif
+  #if ARDUINO_USB_CDC_ON_BOOT
+  #else
+    #if SOC_UART_NUM > 2
+    inline void onData(uint8_t rx, uint8_t tx, void(*fn)(String key, String value)){
+      Serial2.begin(9600, SERIAL_8N1, rx, tx);
+      beeuart::init(&Serial2, fn);
+    }
+    inline void onData(uint8_t rx, uint8_t tx, uint32_t baud, void(*fn)(String key, String value)){
+      Serial2.begin(baud, SERIAL_8N1, rx, tx);
+      beeuart::init(&Serial2, fn);
+    }
+    #endif // #if SOC_UART_NUM > 2
+  #endif
   #endif
 
   inline void print(String key, String value){
