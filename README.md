@@ -3,10 +3,13 @@
 **ไลบรารี่ ลิขสิทธิ์ สำหรับ ผู้ใช้ จอสัมผัส BeeNeXT เท่านั้น**  
 ให้ MCU ต่างๆ เช่น Arduino UNO, Arduino MEGA, Arduino Nano, ESP8266, ESP32, STM32 ฯลฯ  
 เชื่อมต่อกับ จอสัมผัส BeeNeXT  
+
+Version 3.1.15  @01/11/68  
+- fix SoftTimer delay(...) ที่บน PC รัน nested lambda ไม่ได้
   
 Version 3.1.14 @24/09/68  
 - รองรับ USB CDC on boot : Enable ได้ด้วย  
-  
+    
 Version 3.1.13  @22/09/68  
 - fix BeeUart ให้มีคำสัง print, และ กรอง [BN] ออก  
   
