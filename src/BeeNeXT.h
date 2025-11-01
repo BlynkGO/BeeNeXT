@@ -79,6 +79,8 @@
  * Version 3.1.14  @24/09/68
  *    - รองรับ USB CDC on boot : Enable  ได้ด้วย
  * 
+ * Version 3.1.15  @01/11/68
+ *    - fix SoftTimer delay(...) ที่บน PC รัน nested lambda ไม่ได้
  */
 
 #ifndef __BEENEXT_H__
@@ -89,7 +91,7 @@
 /** Minor version number (x.X.x) */
 #define BEENEXT_VERSION_MINOR   1
 /** Patch version number (x.x.X) */
-#define BEENEXT_VERSION_PATCH   14
+#define BEENEXT_VERSION_PATCH   15
 
 #define BEENEXT_VERSION_TEXT    (String(BEENEXT_VERSION_MAJOR)+"."+String(BEENEXT_VERSION_MINOR)+"."+String(BEENEXT_VERSION_PATCH))
 

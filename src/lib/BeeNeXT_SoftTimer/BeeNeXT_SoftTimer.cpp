@@ -238,7 +238,7 @@ bool SoftTimer::del_swtimer(uint16_t id){
   swtimer_t* node   = find_swtimer(id);
   if(node){
     ll_remove(&swtimer_ll, (void *) node);
-    free(node);
+    // free(node);  // bug ให้เอาออก
     return true;
   }
   return false;
