@@ -81,6 +81,11 @@
  * 
  * Version 3.1.15  @01/11/68
  *    - fix SoftTimer delay(...) ที่บน PC รัน nested lambda ไม่ได้
+ * 
+ * Version 3.1.16  @11/11/68
+ *    - เพิ่ม โปรโตคอล BeeBluetooth สำหรับ ESP32 สื่อสารทาง Bluetooth Classic กันได้
+ *    - fix BeeUart  print ให้ float decimal ได้
+ * 
  */
 
 #ifndef __BEENEXT_H__
@@ -91,7 +96,7 @@
 /** Minor version number (x.X.x) */
 #define BEENEXT_VERSION_MINOR   1
 /** Patch version number (x.x.X) */
-#define BEENEXT_VERSION_PATCH   15
+#define BEENEXT_VERSION_PATCH   16
 
 #define BEENEXT_VERSION_TEXT    (String(BEENEXT_VERSION_MAJOR)+"."+String(BEENEXT_VERSION_MINOR)+"."+String(BEENEXT_VERSION_PATCH))
 
@@ -130,6 +135,8 @@
 #include "BeeI2C.h"
 #elif BEENEXT_USE_BEEMQTT
 #include "BeeMQTT.h"
+#elif BEENEXT_USE_BEEBLUETOOTH
+#include "BeeBluetooth.h"
 #endif
 
 
@@ -163,6 +170,8 @@ extern "C" {
 #define BeeI2C        BeeNeXT
 #elif BEENEXT_USE_BEEUART
 #define BeeUART       BeeNeXT
+#elif BEENEXT_USE_BEEBLUETOOTH
+#define BeeBluetooth  BeeNeXT
 #endif
 
 #define BEENEXT_CONNECTION_TIMEOUT      3000
@@ -549,7 +558,44 @@ public:
 
   #endif //  #if defined(ESP8266) || defined(ESP32)
   #endif // defined(BEENEXT_2_4) || defined(BEENEXT_2_4C) || defined(BEENEXT_2_8) || defined(BEENEXT_2_8C) || defined(BEENEXT_3_2) || defined(BEENEXT_3_2C) || defined(BEENEXT_4_3) || defined(BEENEXT_4_3C) || defined(BEENEXT_4_3IPS) || defined(BEENEXT_5_0IPS) || defined(BEENEXT_7_0IPS)
-  #endif  // BEENEXT_USE_BEEMQTT
+
+  #elif BEENEXT_USE_BEEBLUETOOTH
+    // สำหรับฝั่ง MCU
+    inline void begin(void(*fn)(String key, String value)) {
+      beebluetooth::init(fn);
+    }
+
+    // สำหรับฝั่ง BeeNeXT_TFT
+    inline void onData(String MCU_Address, void(*fn)(String key, String value)) {
+      beebluetooth::init(MCU_Address, fn);
+    }
+
+    inline void print(String key, String value){
+      beebluetooth::print(key, value);
+    }
+
+    inline void print(String key, float value, int decimalPlaces=2){
+      this->print(key, String(value, decimalPlaces));
+    }
+
+    inline void print(String key, double value, int decimalPlaces=2){
+      this->print(key, String(value, decimalPlaces));
+    }
+
+    inline void print(String key, int value){
+      this->print(key, String(value));
+    }
+
+    inline bool connected(){
+      return beebluetooth::connected();
+    }
+
+    inline String address(){
+      return beebluetooth::address();
+    }
+
+  #endif  // BEENEXT_USE_BEEBLUETOOTH
+
 
 static bool   _beenext_enable;
 

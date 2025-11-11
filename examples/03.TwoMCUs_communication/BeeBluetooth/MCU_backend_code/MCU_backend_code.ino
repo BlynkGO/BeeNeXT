@@ -1,29 +1,17 @@
 // beenext_config.h กำหนดดังนี้
-//       #define BEENEXT_USE_BEEI2C              1
+//       #define BEENEXT_USE_BEEI2C              0
 //       #define BEENEXT_USE_BEEUART             0
 //       #define BEENEXT_USE_BEEMQTT             0
-//       #define BEENEXT_USE_BEEBLUETOOTH        0
+//       #define BEENEXT_USE_BEEBLUETOOTH        1   // for ESP32 classic เท่านั้น
+//
+// หลัง init ให้นำ MAC Address ของ MCU ไปให้ฝั่ง จอ BeeNeXT_frontend_code ใช้ในการเชื่อมต่อ
+//
 
 #include <BeeNeXT.h>
 
-// วิธีต่อ MCU หลังบ้าน แบบ BeeI2C กับจอ BeeNeXT
-// UNO  ต่อขา SDA A4, SCL A5, GND ร่วม
-// Nano ต่อขา SDA A4, SCL A5, GND ร่วม
-// MEGA ต่อขา SDA 20, SCL 21, GND ร่วม
-//
-// ESP8266 ต่อขา SDA 4, SCL 5, GND ร่วม  หรือ กำหนดขาเองได้
-// NodeMCU ต่อขา SDA D2, SCL D1, GND ร่วม หรือ กำหนดขาเองได้
-// ESP32 ต่อขา SDA 21, SCL 22, GND ร่วม   หรือ กำหนดขาเองได้
-
-#if defined(ESP8266) || defined(ESP32)
-  #define LED_PIN     2
-  #define LED_ON      HIGH
-  #define LED_OFF     LOW
-#else  // UNO, MEGA, NANO
-  #define LED_PIN     13
-  #define LED_ON      HIGH
-  #define LED_OFF     LOW
-#endif
+#define LED_PIN     2
+#define LED_ON      HIGH
+#define LED_OFF     LOW
 
 void setup() {
   Serial.begin(115200); Serial.println();

@@ -31,3 +31,4 @@
 *.app
 
 backup/*
+/.vscode

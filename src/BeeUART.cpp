@@ -210,7 +210,7 @@ void beeuart::print(String key, String value){
 }
 
 void beeuart::print(String key, float value, int decimalPlaces){
-  beeuart::print(key, String(value));
+  beeuart::print(key, String(value, decimalPlaces));
 }
 
 void beeuart::print(String key, double value, int decimalPlaces){
