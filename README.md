@@ -3,7 +3,11 @@
 **ไลบรารี่ ลิขสิทธิ์ สำหรับ ผู้ใช้ จอสัมผัส BeeNeXT เท่านั้น**  
 ให้ MCU ต่างๆ เช่น Arduino UNO, Arduino MEGA, Arduino Nano, ESP8266, ESP32, STM32 ฯลฯ  
 เชื่อมต่อกับ จอสัมผัส BeeNeXT  
-
+  
+Version 3.1.16  @30/11/68   
+- เพิ่ม โปรโตคอล BeeBluetooth สำหรับ ESP32 สื่อสารทาง Bluetooth Classic กันได้  
+- fix BeeUart  print ให้ float decimal ได้  
+  
 Version 3.1.15  @01/11/68  
 - fix SoftTimer delay(...) ที่บน PC รัน nested lambda ไม่ได้
   
